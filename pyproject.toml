@@ -1,0 +1,7 @@
+[tool.pytest.ini_options]
+markers =[
+    "api_test: quick check for API test",
+]
+testpaths=["tests"]
+pythonpath=["."]
+
