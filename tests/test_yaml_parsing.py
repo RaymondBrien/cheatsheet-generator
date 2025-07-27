@@ -22,7 +22,7 @@ def local_generated_cheatsheets():
 
 # we want the cheatshets to be yaml files for easier data validation (dicts) 
     # we can change these into md if we need later
-def test_yaml_to_md(local_generated_cheatsheets):
+def test_yaml_parsing(local_generated_cheatsheets):
     """All generated cheatsheets should be rendered as yaml files
 
 
@@ -33,4 +33,5 @@ def test_yaml_to_md(local_generated_cheatsheets):
             assert all(isinstance(local_generated_cheatsheets, glob(*.yml))
         with yaml.safe_load(file):
             assert isinstance(file, dict)
+        # TODO assert in real api call yaml config is validated to have correct keys (maybe with Prompt args always never being None?, important to check URL also valid in each topic file as link to real docs)
 

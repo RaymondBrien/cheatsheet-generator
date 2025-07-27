@@ -66,6 +66,11 @@ class Prompt:
 
         If documentation is unavailable, do **not** include that command.
         """
+    
+    def grab_docs_links():
+        self.docs_links = [https://www.gnu.org/software/bash/manual/bash.html]  # TODO eventually make this dynamic or keep links in with the topic
+    def main_text_only():
+        return self.main_text
 
     def default(self):
         # ex = yaml.safe_load(self.example_cheatsheet)
@@ -89,3 +94,4 @@ if __name__ == "__main__":
     print(a.ljust(10, "|"))
     print(type(a))
     print(len(a))
+    print("main text only is:", Prompt().main_text)
