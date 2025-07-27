@@ -7,4 +7,5 @@
 [ ] add a series of topic files 
 [ ] test autoruns from gh workflows
 [ ] check cheatsheets are uploaded correctly and saved in correct location 
+[ ] run CI tests on each push
 
