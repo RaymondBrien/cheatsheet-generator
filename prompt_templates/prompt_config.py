@@ -1,28 +1,18 @@
-from typing import Dict, Str
+from typing import Dict
+from pathlib import Path
+
 import yaml
 
 from API_CONFIG import MAX_TOKENS
 
-class Role:
-    def __init__(self):
-        self.default = """knowledgeable technical assistant and expert in setting up 
-        developers with the most relevant and future-proof skills"""
 
-        self.custom: Str = ""
-
-    def custom_role(self) -> Str:
-        input("Type a custom role here: ")
-
-
-def validate_token_length(text: Str, MAX_TOKENS) -> None:
+def validate_token_length(text: str, MAX_TOKENS) -> str:
     if len(text) < MAX_TOKENS:
         return text
     else: 
         raise RuntimeError()  # TODO
 
-
-if
-def get_topic_dict(filename: Str):
+def get_topic_dict(filename: str):
     with open(f"{filename}.yml", 'r',) as f:
         output = yaml.safe_load(f)
     print(output)
@@ -30,6 +20,19 @@ def get_topic_dict(filename: Str):
 
 def match_topic_with_file() -> Path:
     ...
+
+
+
+class Role:
+    def __init__(self):
+        self.default = """knowledgeable technical assistant and expert in setting up
+        developers with the most relevant and future-proof skills"""
+
+        self.custom: str = ""
+
+    def custom_role(self) -> str:
+        self.role = input("Type a custom role here: ")
+        return self.role
 
 
 class Topic:

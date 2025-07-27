@@ -67,9 +67,10 @@ class Prompt:
         If documentation is unavailable, do **not** include that command.
         """
     
-    def grab_docs_links():
-        self.docs_links = [https://www.gnu.org/software/bash/manual/bash.html]  # TODO eventually make this dynamic or keep links in with the topic
-    def main_text_only():
+    def grab_docs_links(self):
+        self.docs_links = ["https://www.gnu.org/software/bash/manual/bash.html"]  # TODO eventually make this dynamic or keep links in with the topic
+
+    def main_text_only(self):
         return self.main_text
 
     def default(self):
