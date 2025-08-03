@@ -1,5 +1,6 @@
-<topic_name>:
+Topic: x
+Subtopics:
   - <subtopic_1>
   - <subtopic_2>
   - <subtopic_3>
-docs_link: <link_to_docs>
+Docs: <link_to_docs>
