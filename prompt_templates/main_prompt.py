@@ -1,98 +1,82 @@
 import sys
+from enum import Enum
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from pathlib import Path
 from typing import Union, Dict, List
-# import yaml
+
+import anthropic
 
 import prompt_templates.prompt_config as prompt_config
-# from example_cheatsheet import example_cheatsheet
+from prompt_config import PromptType, RequestReturnType
 
 
 class Prompt:
     def __init__(self):
+        # Initialize the Anthropic client and prompt configuration
         role = prompt_config.Role()
-        self.role: str = role.default
+        self.client: anthropic.Anthropic = self.client_init()
 
+        # POST request parameters
+        # self.model: str = "claude-2"  # TODO make this dynamic
+        self.prompt_type: Enum = PromptType.TEXT
+
+        # Prompt instance text content
+        self.role: str = ""
         self.targetted_os: Union[str, List[str]] = ""
-        # self.example_cheatsheet = Path()
+        self.example_cheatsheet: Path = Path()
         self.topic: Union[str, Dict[str, str]] = ""
         self.subtopic: Union[str, List[str]] = ""
         self.docs_links: Union[str, List[str]] = ""
+        self.request_return_type: Enum = RequestReturnType.TEXT
 
-        # main text bodies
-        self.output_goal: str = """
-        A YAML-formatted list of 5 distinct, relevant,
-        and verifiable commands with correct usage explanations.
+        # Prompt instance configuration of main text bodies
+        self.output_goal: str = ""
+        self.additional_reqs: str = ""
+        self.format_instructions: str = ""
+        self.main_text: str = ""
+
+    def client_init(self, *args):
         """
-
-        self.additional_reqs: str = f"""
-        * The commands must be valid and executable on standard Unix-based systems ({self.targetted_os})
-        * Only include commands relevant to the subtopic.
-        * Be concise but informative.
-        * Do NOT wrap the YAML in triple backticks (` ``` `).
-        * Avoid repetition across subtopics.
-        * If a subtopic cannot yield 5 unique, documented commands, 
-          return an error message instead of guessing.\n
+        Initialize the Anthropic client.
         """
+        return anthropic.Anthropic(*args) if args else anthropic.Anthropic()
 
-        self.format_instructions: str = """
-        Return a valid YAML file structured like this:
-
-        ```yaml
-        <command_1>: "<short, correct explanation of what it does and how/when it is used>"
-        <command_2>: "<...>"
-        <command_3>: "<...>"
-        <command_4>: "<...>"
-        <command_5>: "<...>"
-        ```
-
-        Each key should be a command (like `ls`, `cat`, `grep`, `awk`, etc.).
-        Each value should be a **brief, professional-level explanation** (1–2 sentences).
-        The YAML must contain **exactly 5** unique commands with no duplicates or near-duplicates.\n
+    def upload_file_to_anthropic(
+        self,
+        type: PromptType = PromptType.DOCUMENT,  # default
+        path: str = ""):
         """
-
-        self.main_text: str = f"""
-        You are a {self.role}, brilliant at generating a concise,
-        accurate {self.topic} cheat sheet of useful commands for professional developers,
-        particularly focussing on {self.subtopic}.
-
-        You must only use commands that are commonly used and are **officially documented** in 
-        reputable developer references such as:
-        - {self.topic} official documentation
-        - from {self.docs_links}. \n
-
-        If documentation is unavailable, do **not** include that command.
+        Upload a file to the Anthropic client.
         """
-    
-    def grab_docs_links(self):
-        self.docs_links = ["https://www.gnu.org/software/bash/manual/bash.html"]  # TODO eventually make this dynamic or keep links in with the topic
+        # Initialize the Anthropic client
+        self.client.beta.files.upload(
+            file=(str(type), open(path, "rb")),
+        )
 
     def main_text_only(self):
         return self.main_text
 
-    def default(self):
-        # ex = yaml.safe_load(self.example_cheatsheet)
-
-        # self.topic = ex.keys()
-        # self.subtopic = ex.values()
-        t = [
-            "main_text",
-            "format_instructions",
-            "additional_reqs",
-            "output_goal",
-        ]
-        l = [getattr(self, i) for i in t]
-        return "\n".join(l)
+    def request_markdown(self):
+        """Request Claude to return markdown formatted text."""
+        self.prompt_type = PromptType.TEXT
 
 
-if __name__ == "__main__":
+def quick_prompt_check():
+    warning = input(
+        "This is a test prompt. Do you want to continue? (y/n): "
+    )
+    if warning.lower() != 'y':
+        print("Test prompt aborted.")
+        return
+    print("Running test prompt...")
+
     # for quick testing
-    a = Prompt()
-    a = a.default()
-    print(a.ljust(10, "|"))
-    print(type(a))
-    print(len(a))
-    print("main text only is:", Prompt().main_text)
+    p = Prompt()
+    p = p.default()
+    print(p.ljust(10, "|"))
+    print(type(p))
+    print(len(p))
+    print("main text only is:", p.main_text)
