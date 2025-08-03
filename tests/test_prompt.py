@@ -2,7 +2,7 @@ import os
 import pytest
 import anthropic
 
-from prompt_templates.main_prompt import Prompt
+from prompt_templates.BasePrompt import Prompt
 from API_CONFIG import MAX_TOKENS
 
 

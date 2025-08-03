@@ -1,23 +1,42 @@
-from prompt_templates.main_prompt import Prompt
-from prompt_templates.prompt_config import Role
+from typing import Union, List
+from pathlib import Path
+from prompt_templates.BasePrompt import Prompt
+from prompt_templates.prompt_config import Role, PromptType, RequestReturnType, TargettedOs
+from utils.parse_yaml import read_yaml_key, render_yaml_file
 
-from typing import Union, Dict, List
+def match_topic_file(topic: str) -> Path:
+        try:
+            return Path(f"topics/{topic}.yml")
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Topic file '{topic}.yml' not found in 'topics/' directory.")
 
 class DefaultPrompt(Prompt):
-    def __init__(self):
+    def __init__(self, topic: str):
         super().__init__()
         role = Role()
 
-        self.role: str = role.default
-        self.prompt_type = "text"
-        self.targetted_os: Union[str, List[str]] = ""
+        # API configuration
+        self.max_tokens = 1000
+        self.temperature = 0.7
 
-        # self.example_cheatsheet = Path()
-        self.topic: Union[str, Dict[str, str]] = ""
-        self.subtopic: Union[str, List[str]] = ""
-        self.docs_links: Union[str, List[str]] = ""
+        # Text content
+        self.request_return_type = RequestReturnType.TEXT
+        self.targetted_os = TargettedOs.MACOS
+        self.prompt_type = PromptType.TEXT
+        # self.example_cheatsheet: Path = Path("topics/example_cheatsheet.yml")
+
+        self.role: str = role.default
+        self.topic_file: Path = match_topic_file(topic)
+        try:
+            self.topic: str = topic if (topic == read_yaml_key(self.topic_file, "Topic")) else ValueError(f"topic does not match file: {render_yaml_file(topic_file)}")
+            self.subtopics: List[str] = ", ".join(read_yaml_key(self.topic_file, "Subtopics", as_list=True))
+        except ValueError as e:
+            raise ValueError(f"Error reading topic file: {e}")
+        self.topic_docs: Union[str, List[str]] = read_yaml_key(self.topic_file, "Docs")  # TODO, add catch for docs, so that if used 'as_list=True', there MUST be more than one value in order, otherwise -> ['a' 'b', 'c'] etc
+
         self.main_text = self.default()
 
+        # Actual text
         self.output_goal: str = """
         A YAML-formatted list of 5 distinct, relevant,
         and verifiable commands with correct usage explanations.
@@ -51,19 +70,16 @@ class DefaultPrompt(Prompt):
 
         self.main_text: str = f"""
         You are a {self.role}, brilliant at generating a concise,
-        accurate {self.topic} cheat sheet of useful commands for professional developers,
-        particularly focussing on {self.subtopic}.
+        accurate *{self.topic}* cheat sheet of useful commands for professional developers,
+        particularly focussing on the following subtopics: {self.subtopics}.
 
         You must only use commands that are commonly used and are **officially documented** in
         reputable developer references such as:
         - {self.topic} official documentation
-        - from {self.docs_links}. \n
+        - from {self.topic_docs}.
 
         If documentation is unavailable, do **not** include that command.
         """
-
-        self.docs_links = ["https://www.gnu.org/software/bash/manual/bash.html"]
-
     def default(self):
         # ex = yaml.safe_load(self.example_cheatsheet)
 
