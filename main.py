@@ -1,47 +1,49 @@
 import sys
 from pathlib import Path
-from dotenv import load_dotenv
-import anthropic
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 from prompt_templates.main_prompt import Prompt
 
-# load env variable necessary?
-#load_dotenv()
+def get_prompt(*args) -> Prompt:
+    """Return a Prompt object initialized with the default or custom arguments."""
+    return Prompt(*args) if args else Prompt()
 
-#dotenv_path = Path(__file__).resolve().parent / '.env'
-#if dotenv_path.exists():
-#    load_dotenv(dotenv_path=dotenv_path)
-#    print(".env loaded")
+def main(dry_run: bool = False):
+    dry_run = False  # CLI argument to skip API call to validate input for testing
 
-# default prompt text object
-def get_default_prompt():
-    return Prompt()
+    prompt = get_prompt()  # auto-inits client
+    role = prompt.role
+    prompt_type = prompt.prompt_type
+    content_text = prompt.main_text  # TODO should return a content object which also has a type
+
+    if not dry_run:
+        client = prompt.client
+        message = client.messages.create(
+            model="claude-opus-4-20250514",
+            max_tokens=1000,
+            temperature=1,
+            system=prompt,
+            messages=[  # TODO make abstract
+                {
+                    "role": role,
+                    "content": [
+                        {
+                            "type": prompt_type,
+                            "text": content_text,
+                        }
+                    ]
+                }
+            ]
+        )
+        # Claude's repsonse
+        print(message.content)
+    else:
+        print(f"Dry run mode: {content_text}")
+        print(f"Role: {role}")
+        print(f"Prompt type: {prompt_type}")
+
 
 
 if __name__== "__main__":
-
-    message = client.messages.create(
-        model="claude-opus-4-20250514",
-        max_tokens=1000,
-        temperature=1,
-        system=get_default_prompt().main_text
-        messages=[  # TODO make abstract
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "Why is the ocean salty?"
-                    }
-                ]
-            }
-        ]
-    )
-    print(message.content)
-
-    response = client.responses.create(model="gpt-4.1", input=get_default_prompt())
-
-    print(response.output_text)
-
-
+    main()
