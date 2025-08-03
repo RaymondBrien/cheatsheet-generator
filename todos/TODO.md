@@ -3,11 +3,20 @@
 ## 🚀 High Priority - Core Functionality
 [x] send basic prompt
 [x] test api connection first
-[ ] send first request for bash cheatsheet
+[x] send first request for bash cheatsheet
 [ ] makefile create template topic card with subtopics
 [ ] receive yaml with commands and explanations 
 [ ] check cheatsheets are uploaded correctly and saved in correct location 
 [ ] select the right yaml file with a single topic prompt (nice to have?)
+
+## 🧪 Today's Testing Tasks
+[x] Fix API error in main.py (client.responses.create doesn't exist)
+[x] Add dry run validation for prompt content
+[x] Create CLI interface for easier testing
+[x] Test dry run mode to validate prompt content
+[x] Test first live API call with bash topic
+[ ] Validate API response format and content
+[ ] Add error handling for API failures
 
 ## 🏗️ Architecture & Design Improvements
 [ ] Implement dependency injection pattern
@@ -15,7 +24,7 @@
 [ ] Separate configuration management from business logic
 [ ] Implement proper logging system with structured logging
 [ ] Add health checks and monitoring endpoints
-[ ] Create abstract base classes for extensibility
+[x] Create abstract base classes for extensibility
 
 ## 🛡️ Error Handling & Resilience
 [ ] Implement comprehensive error handling with custom exceptions
