@@ -10,7 +10,7 @@ from typing import Union, Dict, List
 import anthropic
 
 import prompt_templates.prompt_config as prompt_config
-from prompt_config import PromptType, RequestReturnType
+from .prompt_config import PromptType, RequestReturnType, TargettedOs
 
 
 class Prompt:
@@ -21,16 +21,21 @@ class Prompt:
 
         # POST request parameters
         # self.model: str = "claude-2"  # TODO make this dynamic
-        self.prompt_type: Enum = PromptType.TEXT
+        self.prompt_type = PromptType.TEXT
+        self.message_role = prompt_config.MessageRole.USER
 
         # Prompt instance text content
         self.role: str = ""
-        self.targetted_os: Union[str, List[str]] = ""
+        self.targetted_os: TargettedOs = None
+        self.request_return_type: RequestReturnType = None
         self.example_cheatsheet: Path = Path()
-        self.topic: Union[str, Dict[str, str]] = ""
-        self.subtopic: Union[str, List[str]] = ""
-        self.docs_links: Union[str, List[str]] = ""
-        self.request_return_type: Enum = RequestReturnType.TEXT
+        self.topic_file: Path = Path()
+        self.topic: str = ""
+        self.subtopic: List[str] = ""
+        self.topic_docs: Union[str, List[str]] = ""
+        self.request_return_type: str = ""
+        self.max_tokens: int = 0
+        self.temperature: float = 0.0
 
         # Prompt instance configuration of main text bodies
         self.output_goal: str = ""
