@@ -1,6 +1,7 @@
-bash:
+Topic: bash
+Subtopics:
   - file management
   - scripting
   - useful concepts
   - personalisation
-docs_link: https://www.gnu.org/software/bash/manual/bash.html#Shell-Syntax
+Docs: https://www.gnu.org/software/bash/manual/bash.html#Shell-Syntax
