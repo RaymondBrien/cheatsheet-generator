@@ -21,7 +21,7 @@ class Role:
 
 class Topic:
     def __init__(self):
-        self.topic: str ""
+        self.topic: str = ""
         self.topic_file: Dict = self.get_topic_dict(self.topic)  # TODO fill out func above to find topic file by matching text with file name from topics dir
         
 
