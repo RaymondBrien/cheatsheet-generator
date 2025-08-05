@@ -82,6 +82,7 @@ def main(topic: str, dry_run: bool = True):  # Accept topic parameter
             print("\n📄 Response:")
             print("=" * 50)
             # Handle different content block types
+            # https://docs.anthropic.com/en/api/messages
             for block in message.content:
                 if hasattr(block, 'text'):
                     print(block.text)

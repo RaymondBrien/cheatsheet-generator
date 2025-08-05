@@ -4,10 +4,12 @@
 [x] send basic prompt
 [x] test api connection first
 [x] send first request for bash cheatsheet
+[ ] save received response in outputs/cheatsheets
 [ ] makefile create template topic card with subtopics
 [ ] receive yaml with commands and explanations 
 [ ] check cheatsheets are uploaded correctly and saved in correct location 
 [ ] select the right yaml file with a single topic prompt (nice to have?)
+[ ] git commit and push cheatsheet pdf once completed
 
 ## 🧪 Today's Testing Tasks
 [x] Fix API error in main.py (client.responses.create doesn't exist)
@@ -16,6 +18,7 @@
 [x] Test dry run mode to validate prompt content
 [x] Test first live API call with bash topic
 [ ] Validate API response format and content
+[ ] Write unit tests for api_utils functions
 [ ] Add error handling for API failures
 
 ## 🏗️ Architecture & Design Improvements
