@@ -1,4 +1,7 @@
 # cheatsheet-generator
+
+[![Run Tests](https://github.com/RaymondBrien/cheatsheet-generator/actions/workflows/test.yml/badge.svg)](https://github.com/RaymondBrien/cheatsheet-generator/actions/workflows/test.yml)
+
 A dynamic cheatsheet generator which generates self-validating cheatsheets for tools specified in a topic-subtopic structure.
 
 > [!TIP] To run via CLI:
