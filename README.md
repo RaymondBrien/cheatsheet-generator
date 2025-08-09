@@ -4,12 +4,14 @@
 
 A dynamic cheatsheet generator which generates self-validating cheatsheets for tools specified in a topic-subtopic structure.
 
-> [!TIP] To run via CLI:
+> [!TIP]
+> To run via CLI:
 > ```bash
 > python cli.py --topic <TOPIC>
 > ```
->
-> [!IMPORTANT] **Environment Setup:**
+
+> [!IMPORTANT]
+> **Environment Setup:**
 > 1. Copy `.env.template` to `.env` (or create `.env` manually)
 > 2. Add your Anthropic API key: `ANTHROPIC_API_KEY=sk-ant-...`
 > 3. The system will automatically load your API key from `.env`
