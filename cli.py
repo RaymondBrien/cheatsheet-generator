@@ -2,15 +2,17 @@
 """
 CLI interface for the cheatsheet generator.
 """
-
-import argparse
-import sys
-from pathlib import Path
-
 # Add the project root to the path
 sys.path.append(str(Path(__file__).resolve().parent))
 
+import argparse
+import re
+import sys
+import yaml
+from pathlib import Path
 from main import main as run_generator
+
+CHEATSHEET_DIR = Path.cwd() / "cheatsheets"  # assumes this file is in root
 
 def create_parser():
     """Create and configure the argument parser."""
@@ -54,6 +56,41 @@ Examples:
     
     return parser
 
+
+def save_cheatsheet(response: str, topic: str, CHEATSHEET_DIR: Path, *args, **kwargs):
+# Fix the directory path
+CHEATSHEET_DIR = Path.cwd() / "outputs" / "cheatsheets"
+
+# Fix the save_cheatsheet function
+def save_cheatsheet(response: str, topic: str, cheatsheet_dir: Path):
+    """Save the generated cheatsheet to a YAML file."""
+    # Ensure directory exists
+    cheatsheet_dir.mkdir(parents=True, exist_ok=True)
+
+    # Create filename with .yml extension
+    filename = f"{topic}_cheatsheet.yml"
+    filepath = cheatsheet_dir / filename
+
+    try:
+        # Extract YAML content if response contains it
+        yaml_match = re.search(r'```yaml\s*(.*?)\s*```', response, re.DOTALL)
+        if yaml_match:
+            yaml_content = yaml_match.group(1)
+            # Validate YAML
+            parsed_yaml = yaml.safe_load(yaml_content)
+            # Save formatted YAML
+            with open(filepath, 'w') as f:
+                yaml.dump(parsed_yaml, f, default_flow_style=False, sort_keys=False)
+        else:
+            # If no YAML found, save the raw response
+            with open(filepath, 'w') as f:
+                f.write(response)
+
+        print(f"✅ Cheatsheet saved successfully: {filepath}")
+
+    except Exception as e:
+        raise RuntimeError(f"Failed to save cheatsheet: {e}")
+
 def main():
     """Main CLI entry point."""
     parser = create_parser()
@@ -67,12 +104,18 @@ def main():
         print(f"   Dry run: {dry_run}")
         print(f"   Topic: {args.topic}")
         print(f"   Verbose: {args.verbose}")
-        print()
     
     try:
         # Run the generator with topic argument
-        run_generator(dry_run=dry_run, topic=args.topic)
-        
+        response: str = run_generator(dry_run=dry_run, topic=args.topic)
+        print(response)
+
+        if not response:
+            print("❌ No response generated. Exiting.")
+            raise RuntimeError("No response generated")
+        if not dry_run:
+            save_cheatsheet(response, args.topic, CHEATSHEET_DIR)
+
     except KeyboardInterrupt:
         print("\n⚠️  Operation cancelled by user")
         sys.exit(1)
