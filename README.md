@@ -5,10 +5,17 @@ A dynamic cheatsheet generator which generates self-validating cheatsheets for t
 > ```bash
 > python cli.py --topic <TOPIC>
 > ```
+>
+> [!IMPORTANT] **Environment Setup:**
+> 1. Copy `.env.template` to `.env` (or create `.env` manually)
+> 2. Add your Anthropic API key: `ANTHROPIC_API_KEY=sk-ant-...`
+> 3. The system will automatically load your API key from `.env`
 
 ## Features:
 - safe generated files
 - configurable calls to different LLM clients
+- robust environment variable loading with fallbacks
+- automatic .env file detection and loading
 
 ## Design:
 ```mermaid

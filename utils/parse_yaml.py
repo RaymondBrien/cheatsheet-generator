@@ -21,7 +21,7 @@ def render_yaml_file(file: Path) -> Dict[str, str]:
     with open(file, 'r') as f:
         return yaml.safe_load(f)
 
-def read_yaml_key(filepath: Path, key: str, as_list: Optional[bool] = False) -> Union[List[str], str]:
+def read_yaml_key(filepath: Path, key: str, as_list: Optional[bool] = False) -> Union[str, List[str]]:
     """
     Convert a YAML file to a dictionary.
 
@@ -31,4 +31,4 @@ def read_yaml_key(filepath: Path, key: str, as_list: Optional[bool] = False) -> 
     with open(filepath, 'r') as f:
         file = yaml.safe_load(f)
         value =  file.get(key, "")
-        return list(value) if as_list else value
+        return list(value) if as_list else str(value)

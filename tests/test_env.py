@@ -2,12 +2,22 @@
 """
 Test script for environment loader
 """
+# Add the project root to the path
 
 import sys
 from pathlib import Path
 
-# Add the project root to the path
 sys.path.append(str(Path(__file__).resolve().parent))
+
+from utils.env_loader import (
+    create_env_template,
+    find_env_file,
+    get_anthropic_api_key,
+    load_environment_variables,
+    setup_anthropic_environment,
+    validate_api_key,
+)
+
 
 def test_environment_loader():
     """Test the environment loader functionality."""
@@ -15,18 +25,10 @@ def test_environment_loader():
     print("=" * 50)
     
     try:
-        from utils.env_loader import (
-            load_environment_variables,
-            get_anthropic_api_key,
-            validate_api_key,
-            setup_anthropic_environment,
-            create_env_template
-        )
         
         print("✅ Environment loader imported successfully")
         
         # Test finding .env file
-        from utils.env_loader import find_env_file
         env_file = find_env_file()
         if env_file:
             print(f"📁 Found .env file: {env_file}")

@@ -1,17 +1,75 @@
 import os
 import pytest
 import anthropic
+from pathlib import Path
 
-from prompt_templates.BasePrompt import Prompt
+from prompt_templates.prompt_config import Role
+from prompt_templates.default_prompt import DefaultPrompt
 from API_CONFIG import MAX_TOKENS
 
 
-def test_prompt_values():
-    prompt = Prompt()
-    default_text = prompt.default()
-    assert isinstance(default_text, str)
-    assert len(default_text) < MAX_TOKENS
-    ...
+def test_default_starts_with_matched_topic_file(dict_to_yaml):
+    topic = 'mock_topic'
+    mock_topic_file_path = Path(f'topics/{topic}.yml')  # topic file name should match topic string on DefaultPrompt init
+    yaml_content = {
+        'Topic': topic,
+        'Subtopics': ['subtopic1', 'subtopic2'],
+        'Docs': ['doc1', 'doc2']
+    }
+    dict_to_yaml(yaml_content, mock_topic_file_path)
+
+    default_prompt = DefaultPrompt(topic=topic)  # topic file should be found automatically  # TODO is this stable or should user specify path?
+    assert default_prompt.topic_file == mock_topic_file_path
+
+def test_update_role_in_default_prompt():
+    """
+    Default prompt should update role when changed.
+    """
+    default_prompt = DefaultPrompt(topic='test topic')
+    assert default_prompt.role == Role().default
+
+    new_role = "new custom role"
+    default_prompt.update_role(new_role)
+    assert default_prompt.role == new_role
+
+@pytest.mark.parametrize("topic", ['test topic', '1', 'A REALLY LONG TEST TOPIC', '123 abc', 'language', '', '  '])
+def test_default_topic_sanitisation(topic):
+    """
+    Default prompt should init with a sanatized specified topic name,
+    even if a file doesn't exist for it.
+    Empty strings should raise a value error
+    """
+    if topic == ' ' or topic.strip() == '':
+        with pytest.raises(ValueError):
+            DefaultPrompt(topic=topic)
+        return  # continue testing the other values
+
+    default_prompt = DefaultPrompt(topic=topic)
+    assert default_prompt.topic == str(topic.lower().replace(" ", "_"))
+    print(f"Default topic file: {default_prompt.topic_file}")
+    assert default_prompt.topic_file is None  # No file should be matched if it doesn't exist
+
+def test_default_prompt_initialization():
+    default_prompt = DefaultPrompt(topic='test topic')
+    assert isinstance(default_prompt.main_text, str)
+    assert default_prompt.role == Role().default
+
+def test_default_prompt_length():
+    default_prompt = DefaultPrompt(topic='test topic')
+    assert len(default_prompt.main_text) < MAX_TOKENS
+
+def test_default_prompt_contains_main_text_components():
+    default_prompt = DefaultPrompt(topic='test topic')
+    default_text = default_prompt.default()
+    assert default_prompt.main_text is not None
+    assert isinstance(default_prompt.main_text, str)
+    assert len(default_prompt.main_text) > 0
+    assert default_prompt.output_goal in default_text
+    assert default_prompt.additional_reqs in default_text
+    assert default_prompt.format_instructions in default_text
+
+
+
 
 @pytest.mark.api_test
 @pytest.mark.skip
@@ -47,6 +105,6 @@ def test_api_connection_returns_text():
     assert response is not None
     assert isinstance(response, list)  # expect [TextBlock(citations=None, text='...', type='text')]
 
-    # load env api key 
+    # load env api key
     # check still valid and http request (curl) does not fail
 

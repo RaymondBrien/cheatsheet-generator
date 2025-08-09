@@ -1,7 +1,12 @@
+[project]
+name = "cheatsheet-generator"
+version = "0.1.0"
+description = "A tool to generate cheatsheets from topics and subtopics using CLAUDE"
+
 [tool.pytest.ini_options]
 markers =[
     "api_test: quick check for API test",
 ]
 testpaths=["tests"]
 pythonpath=["."]
-
+addopts = "-v --disable-warnings"

@@ -4,39 +4,38 @@ from prompt_templates.BasePrompt import Prompt
 from prompt_templates.prompt_config import Role, PromptType, RequestReturnType, TargettedOs
 from utils.parse_yaml import read_yaml_key, render_yaml_file
 
-def match_topic_file(topic: str) -> Path:
-        try:
-            return Path(f"topics/{topic}.yml")
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Topic file '{topic}.yml' not found in 'topics/' directory.")
+
+from API_CONFIG import MAX_TOKENS
+
 
 class DefaultPrompt(Prompt):
+
     def __init__(self, topic: str):
+
         super().__init__()
         role = Role()
 
         # API configuration
-        self.max_tokens = 1000
-        self.temperature = 0.7
+        self.max_tokens: int = MAX_TOKENS
+        self.temperature: float = 0.7
 
         # Text content
-        self.request_return_type = RequestReturnType.TEXT
-        self.targetted_os = TargettedOs.MACOS
-        self.prompt_type = PromptType.TEXT
-        # self.example_cheatsheet: Path = Path("topics/example_cheatsheet.yml")
-
+        self.request_return_type: str = RequestReturnType.TEXT.value
+        self.targetted_os: str = TargettedOs.MACOS.value
+        self.prompt_type: str = PromptType.TEXT.value
         self.role: str = role.default
-        self.topic_file: Path = match_topic_file(topic)
+
         try:
-            self.topic: str = topic if (topic == read_yaml_key(self.topic_file, "Topic")) else ValueError(f"topic does not match file: {render_yaml_file(topic_file)}")
-            self.subtopics: List[str] = ", ".join(read_yaml_key(self.topic_file, "Subtopics", as_list=True))
+            self.topic: str = self.validate_topic(topic)
+            self.topic_file: Union[Path, None] = self.match_topic_file(topic)
+            self.subtopics: Union[str, None] = ", ".join(read_yaml_key(self.topic_file, "Subtopics", as_list=True)) if self.topic_file else None
+            self.topic_docs: Union[str, List[str]] = read_yaml_key(self.topic_file, "Docs") if self.topic_file else None # TODO, add catch for docs, so that if used 'as_list=True', there MUST be more than one value in order, otherwise -> ['a' 'b', 'c'] etc
         except ValueError as e:
-            raise ValueError(f"Error reading topic file: {e}")
-        self.topic_docs: Union[str, List[str]] = read_yaml_key(self.topic_file, "Docs")  # TODO, add catch for docs, so that if used 'as_list=True', there MUST be more than one value in order, otherwise -> ['a' 'b', 'c'] etc
+            raise ValueError(f"Error setting up default prompt object: {e}")
 
         self.main_text = self.default()
 
-        # Actual text
+        # Text Components
         self.output_goal: str = """
         A YAML-formatted list of 5 distinct, relevant,
         and verifiable commands with correct usage explanations.
@@ -80,6 +79,7 @@ class DefaultPrompt(Prompt):
 
         If documentation is unavailable, do **not** include that command.
         """
+
     def default(self):
         # ex = yaml.safe_load(self.example_cheatsheet)
 

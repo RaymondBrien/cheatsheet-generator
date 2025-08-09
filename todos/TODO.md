@@ -28,6 +28,7 @@
 [ ] Implement proper logging system with structured logging
 [ ] Add health checks and monitoring endpoints
 [x] Create abstract base classes for extensibility
+[x] Refactor so that I don't need a topic file in order to call this, we could just have a string 'bash', and remove the irrelevant sections of the main prompt text
 
 ## 🛡️ Error Handling & Resilience
 [ ] Implement comprehensive error handling with custom exceptions

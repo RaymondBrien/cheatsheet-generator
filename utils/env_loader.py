@@ -47,16 +47,18 @@ def load_environment_variables() -> bool:
 
 def find_env_file() -> Optional[Path]:
     """
-    Find .env file in current directory or parent directories.
+    Find .env file starting from the project root (where this file is located).
     
     Returns:
         Optional[Path]: Path to .env file if found, None otherwise
     """
-    current_dir = Path.cwd()
+    # Start from the directory where this env_loader.py file is located
+    current_file = Path(__file__)
+    project_root = current_file.parent.parent  # Go up from utils/ to project root
     
-    # Check current directory and parent directories (up to 3 levels)
+    # Check project root first, then go up if needed
     for i in range(4):
-        check_dir = current_dir.parents[i] if i > 0 else current_dir
+        check_dir = project_root.parents[i] if i > 0 else project_root
         env_file = check_dir / ".env"
         
         if env_file.exists():
@@ -134,6 +136,14 @@ def setup_anthropic_environment() -> bool:
     
     # Set environment variable explicitly for Anthropic SDK
     os.environ["ANTHROPIC_API_KEY"] = api_key
+    
+    # Also set the working directory to the project root for consistency
+    try:
+        project_root = Path(__file__).parent.parent
+        os.chdir(project_root)
+        logger.info(f"✅ Set working directory to project root: {project_root}")
+    except Exception as e:
+        logger.warning(f"⚠️  Could not change working directory: {e}")
     
     logger.info("✅ Anthropic environment setup complete")
     return True

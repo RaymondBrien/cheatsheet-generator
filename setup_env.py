@@ -3,7 +3,6 @@
 Setup script for environment configuration
 """
 
-import os
 from pathlib import Path
 
 def create_env_file():
