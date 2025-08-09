@@ -1,5 +1,5 @@
 import sys
-from enum import Enum
+import os
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -11,6 +11,7 @@ import anthropic
 
 import prompt_templates.prompt_config as prompt_config
 from .prompt_config import PromptType, RequestReturnType, TargettedOs
+from utils.env_loader import setup_anthropic_environment
 
 
 class Prompt:
@@ -45,8 +46,17 @@ class Prompt:
 
     def client_init(self, *args):
         """
-        Initialize the Anthropic client.
+        Initialize the Anthropic client with robust environment loading.
         """
+        # Ensure environment variables are loaded
+        try:
+            if not setup_anthropic_environment():
+                raise RuntimeError("Failed to setup Anthropic environment variables")
+        except ImportError:
+            # Fallback if env_loader is not available
+            if not os.getenv("ANTHROPIC_API_KEY"):
+                raise RuntimeError("ANTHROPIC_API_KEY environment variable not set")
+        
         return anthropic.Anthropic(*args) if args else anthropic.Anthropic()
 
     def upload_file_to_anthropic(
