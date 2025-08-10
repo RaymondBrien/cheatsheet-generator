@@ -4,9 +4,9 @@
 [x] send basic prompt
 [x] test api connection first
 [x] send first request for bash cheatsheet
-[ ] save received response in outputs/cheatsheets
-[ ] makefile create template topic card with subtopics
-[ ] receive yaml with commands and explanations 
+[ ] save received response in outputs/cheatsheets (mocked up with yaml so do markdown version later, just save a file first)
+[ ] makefile create template topic card with subtopics - or cookiecutter
+[ ] receive dict with commands and explanations  - not yaml, that's silly, then easier to test each key. Then more control on how rendered in markdown cheatsheet
 [ ] check cheatsheets are uploaded correctly and saved in correct location 
 [ ] select the right yaml file with a single topic prompt (nice to have?)
 [ ] git commit and push cheatsheet pdf once completed
@@ -29,6 +29,7 @@
 [ ] Add health checks and monitoring endpoints
 [x] Create abstract base classes for extensibility
 [x] Refactor so that I don't need a topic file in order to call this, we could just have a string 'bash', and remove the irrelevant sections of the main prompt text
+[ ] new cheatsheet for each subtopic - how are these enumerated? Or one cheatsheet per topic split into each subtopics.
 
 ## 🛡️ Error Handling & Resilience
 [ ] Implement comprehensive error handling with custom exceptions

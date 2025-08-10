@@ -3,7 +3,7 @@
 CLI interface for the cheatsheet generator.
 """
 # Add the project root to the path
-sys.path.append(str(Path(__file__).resolve().parent))
+# sys.path.append(str(Path(__file__).resolve().parent))
 
 import argparse
 import re
@@ -29,27 +29,27 @@ Examples:
     )
     
     parser.add_argument(
-        "--topic",
+        "-t", "--topic",
         type=str,
         required=True,
         help="Topic for cheatsheet generation (e.g., bash, python, git)"
     )
     
     parser.add_argument(
-        "--dry-run",
+        "-dr", "--dry-run",
         action="store_true",
         default=True,
         help="Run in dry-run mode to validate prompt (default: True)"
     )
     
     parser.add_argument(
-        "--live",
+        "-l", "--live",
         action="store_true",
         help="Make actual API call (overrides --dry-run)"
     )
     
     parser.add_argument(
-        "--verbose",
+        "-v", "--verbose",
         action="store_true",
         help="Enable verbose output"
     )
@@ -57,19 +57,21 @@ Examples:
     return parser
 
 
-def save_cheatsheet(response: str, topic: str, CHEATSHEET_DIR: Path, *args, **kwargs):
-# Fix the directory path
+def make_version() -> str:
+    """Generate a version string based on the current date."""
+    from datetime import datetime
+    return str(datetime.now().strftime("%Y%m%d_%H%M%S"))
+
 CHEATSHEET_DIR = Path.cwd() / "outputs" / "cheatsheets"
 
-# Fix the save_cheatsheet function
-def save_cheatsheet(response: str, topic: str, cheatsheet_dir: Path):
+def save_cheatsheet(response: str, topic: str):
     """Save the generated cheatsheet to a YAML file."""
     # Ensure directory exists
-    cheatsheet_dir.mkdir(parents=True, exist_ok=True)
-
+    CHEATSHEET_DIR.mkdir(parents=True, exist_ok=True)
+    version =  make_version()
     # Create filename with .yml extension
-    filename = f"{topic}_cheatsheet.yml"
-    filepath = cheatsheet_dir / filename
+    filename = f"{topic}_cheatsheet_{version}.yml"
+    filepath = CHEATSHEET_DIR / filename
 
     try:
         # Extract YAML content if response contains it
@@ -86,8 +88,12 @@ def save_cheatsheet(response: str, topic: str, cheatsheet_dir: Path):
             with open(filepath, 'w') as f:
                 f.write(response)
 
+        # check file made successfully
+        if not filepath.exists():
+            raise RuntimeError(f"Failed to create cheatsheet file: {filepath}")
         print(f"✅ Cheatsheet saved successfully: {filepath}")
 
+        return filepath
     except Exception as e:
         raise RuntimeError(f"Failed to save cheatsheet: {e}")
 
@@ -114,7 +120,7 @@ def main():
             print("❌ No response generated. Exiting.")
             raise RuntimeError("No response generated")
         if not dry_run:
-            save_cheatsheet(response, args.topic, CHEATSHEET_DIR)
+            save_cheatsheet(response, args.topic)
 
     except KeyboardInterrupt:
         print("\n⚠️  Operation cancelled by user")

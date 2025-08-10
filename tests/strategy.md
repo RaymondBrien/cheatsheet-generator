@@ -31,3 +31,17 @@
 - does the main text call the defalt method it has built in, which should contain main text, format instructions, additional reqs and output goal?
 - default instance main text is of type string, and doesn't exceed the max tokens length
 
+
+*Save response to file*
+- no file -> fail
+- yaml file syntax via re -> saves correctly
+- multiple yaml files in single response just take the first?
+- what if yaml is not in correct format?
+- DESIGN: should the key of each be checked first?
+
+- grab topic, make file of same name, ensure that file exists
+- check the content of that file is actually the same as what was returned in the original response
+- if fail, try writing file again?
+- if file name already exists, runtime error - should be categorised by timestamp id
+- in correct folder
+- DESIGN: check what keys are already there? Yaml files are actually useful here. THen I just need yaml to markdown

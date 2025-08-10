@@ -1,7 +1,10 @@
+import os
 import pytest
 import yaml
 
 from pathlib import Path
+
+from cli import CHEATSHEET_DIR, make_version
 
 @pytest.fixture
 def sample_yaml_cheatsheet():
@@ -36,3 +39,36 @@ def local_generated_cheatsheets():
     # TODO
         # return [Path(s) for s in cheatsheet_path:=Abspath(assets.cheatsheets)]
     ...
+
+@pytest.fixture
+def sample_yaml_cheatsheet_response() -> str:
+    """Fixture to provide a sample YAML cheatsheet response."""
+    return """
+```yaml
+- topic: bash
+  date: 2023-10-01
+  commands:
+    - "!!": repeat last command
+    - "fg": bring most recent suspended command to foreground
+    - "&&": exectute next command but ONLY if previous succeeds
+    - "$": store command output to variable
+    - ";": chain commands regardless of success of previous
+```
+"""
+
+@pytest.fixture
+def cheatsheet_file_factory():
+    """Factory fixture that creates cheatsheet files for any topic."""
+    def _create_cheatsheet_file(topic, sample_response):
+        version = make_version()
+        expected_filename = f"{topic}_cheatsheet_{version}.yml"
+        expected_filepath = CHEATSHEET_DIR / expected_filename
+
+        yield sample_response, expected_filepath
+
+        # Cleanup
+        if expected_filepath.exists():
+            os.remove(expected_filepath)
+            print(f"Cleaned up test file: {expected_filepath}")
+
+    return _create_cheatsheet_file
