@@ -9,6 +9,7 @@ dependencies = [
     "pytest>=8.4.1",
     "python-dotenv>=1.1.1",
     "requests>=2.32.4",
+    "pyttsx3 (>=2.99,<3.0)",
 ]
 readme = "README.md"
 

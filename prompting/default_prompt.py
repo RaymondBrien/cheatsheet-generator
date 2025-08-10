@@ -1,11 +1,11 @@
 from typing import Union, List
 from pathlib import Path
+
+from config.API_CONFIG import MAX_TOKENS, DEFAULT_TEMP
+from config.lib_config import TOPIC_DIR
 from prompting.BasePrompt import Prompt
 from prompting.prompt_config import Role, PromptType, RequestReturnType, TargettedOs
 from utils.parse_yaml import read_yaml_key
-
-
-from config.API_CONFIG import MAX_TOKENS, DEFAULT_TEMP
 
 
 class DefaultPrompt(Prompt):

@@ -15,6 +15,7 @@ test:
 
 test-cov:
 	pytest tests/ -v --cov=. --cov-report=html
+	open htmlcov/index.html
 
 clean:
 	rm -rf htmlcov/

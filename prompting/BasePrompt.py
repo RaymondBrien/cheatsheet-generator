@@ -14,6 +14,7 @@ from .prompt_config import PromptType, RequestReturnType, TargettedOs
 from utils.env_loader import setup_anthropic_environment
 from utils.parse_yaml import read_yaml_key, render_yaml_file
 from utils.file_management import sanitise_topic_name
+from config.lib_config import TOPIC_DIR
 
 
 

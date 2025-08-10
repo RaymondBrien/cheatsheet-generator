@@ -1,12 +1,11 @@
-import anthropic
-import pytest
 import os
+import pytest
+import anthropic
 from pathlib import Path
 
+from config.API_CONFIG import MAX_TOKENS
 from prompting.prompt_config import Role
 from prompting.default_prompt import DefaultPrompt
-from config.API_CONFIG import MAX_TOKENS
-from config.lib_config import TOPIC_DIR
 
 # Skip tests that require API initialization
 pytestmark = pytest.mark.skip_api
