@@ -1,5 +1,7 @@
 import sys
+import re
 from pathlib import Path
+from typing import Union
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
@@ -47,12 +49,12 @@ def print_dry_run(role: str, prompt_type: str, prompt_text: str) -> tuple[str, .
     return response
 
 
-def main(topic: str, dry_run: bool = True) -> str:
+def main(topic: str, dry_run: bool = True) -> Union[str, dict[str, str]]:
     print("🚀 Starting cheatsheet generator...")
     print(f"📚 Topic: {topic}")
     
     # Initialize response variable at the top
-    response: str = ""
+    response: Union[str, dict[str, str]] = ""
     
     try:
         # Ensure environment is loaded before creating prompt
@@ -103,17 +105,35 @@ def main(topic: str, dry_run: bool = True) -> str:
             
             # Handle different content block types
             # https://docs.anthropic.com/en/api/messages
+            response_content = ""
+            voiceover_script = ""
+            
             for block in message.content:
                 if hasattr(block, 'text'):
-                    response = block.text
-                    print(f"📄 Text content found:\n {response[:100]}...")  # Print first 100 chars
-                    break  # Take the first text block
-                else:
-                    print(f"Content block type: {type(block).__name__}")
+                    full_response = block.text
+                    
+                    # Extract cheatsheet and voiceover
+                    cheatsheet_match = re.search(r'```yaml\s*(.*?)\s*```', full_response, re.DOTALL)
+                    voiceover_match = re.search(r'```voiceover\s*(.*?)\s*```', full_response, re.DOTALL)
+                    
+                    if cheatsheet_match:
+                        response_content = cheatsheet_match.group(1)
+                        print(f"📄 Cheatsheet content found:\n {response_content[:100]}...")
+                    if voiceover_match:
+                        voiceover_script = voiceover_match.group(1)
+                        print(f"🎤 Voiceover script found:\n {voiceover_script[:100]}...")
+                    
+                    break
             
-            # If no text content found, set a default response
-            if not response:
-                response = "No text content found in API response"
+            # If no cheatsheet content found, set a default response
+            if not response_content:
+                response_content = "No cheatsheet content found in API response"
+            
+            # Return both cheatsheet and voiceover
+            response = {
+                "cheatsheet": response_content,
+                "voiceover": voiceover_script
+            }
 
     except Exception as e:
         print(f"❌ Error: {str(e)}")

@@ -6,9 +6,11 @@ CLI interface for the cheatsheet generator.
 # sys.path.append(str(Path(__file__).resolve().parent))
 
 import argparse
-import re
+import shutil
 import sys
+import re
 import yaml
+
 from pathlib import Path
 from main import main as run_generator
 
@@ -97,6 +99,50 @@ def save_cheatsheet(response: str, topic: str):
     except Exception as e:
         raise RuntimeError(f"Failed to save cheatsheet: {e}")
 
+
+def save_voiceover_script(voiceover_content: str, topic: str):
+    """Save the generated voiceover script to a text file."""
+    # Ensure directory exists
+    VOICEOVER_DIR = Path.cwd() / "outputs" / "voiceover_scripts"
+    VOICEOVER_DIR.mkdir(parents=True, exist_ok=True)
+    
+    version = make_version()
+    filename = f"{topic}_voiceover_{version}.txt"
+    filepath = VOICEOVER_DIR / filename
+    
+    try:
+        with open(filepath, 'w') as f:
+            f.write(voiceover_content)
+        
+        if not filepath.exists():
+            raise RuntimeError(f"Failed to create voiceover file: {filepath}")
+        print(f"✅ Voiceover script saved successfully: {filepath}")
+        
+        return filepath
+    except Exception as e:
+        raise RuntimeError(f"Failed to save voiceover script: {e}")
+
+
+def save_response_data(response_data, topic: str):
+    """Save both cheatsheet and voiceover script if available."""
+    if isinstance(response_data, dict):
+        cheatsheet_content = response_data.get("cheatsheet", "")
+        voiceover_content = response_data.get("voiceover", "")
+        
+        # Save cheatsheet
+        cheatsheet_file = save_cheatsheet(cheatsheet_content, topic)
+        
+        # Save voiceover script if available
+        if voiceover_content:
+            voiceover_file = save_voiceover_script(voiceover_content, topic)
+            return cheatsheet_file, voiceover_file
+        else:
+            return cheatsheet_file, None
+    else:
+        # Handle string response (backward compatibility)
+        cheatsheet_file = save_cheatsheet(response_data, topic)
+        return cheatsheet_file, None
+
 def main():
     """Main CLI entry point."""
     parser = create_parser()
@@ -117,10 +163,13 @@ def main():
         print(response)
 
         if not response:
-            print("❌ No response generated. Exiting.")
-            raise RuntimeError("No response generated")
+            raise RuntimeError("No response generated, exited")
         if not dry_run:
-            save_cheatsheet(response, args.topic)
+            saved_files = save_response_data(response, args.topic)
+            if len(saved_files) == 2 and saved_files[1]:
+                print(f"✅ Saved both cheatsheet and voiceover script")
+            else:
+                print(f"✅ Saved cheatsheet only")
 
     except KeyboardInterrupt:
         print("\n⚠️  Operation cancelled by user")

@@ -4,12 +4,16 @@
 [x] send basic prompt
 [x] test api connection first
 [x] send first request for bash cheatsheet
-[ ] save received response in outputs/cheatsheets (mocked up with yaml so do markdown version later, just save a file first)
+[x] save received response in outputs/cheatsheets (mocked up with yaml so do markdown version later, just save a file first)
 [ ] makefile create template topic card with subtopics - or cookiecutter
-[ ] receive dict with commands and explanations  - not yaml, that's silly, then easier to test each key. Then more control on how rendered in markdown cheatsheet
+[ ] poetry for easier deps management
+[ ] validate each command?
+[ ] request a second response (or two parts of one response for single api call) which returns an accompanying voiceover-script
 [ ] check cheatsheets are uploaded correctly and saved in correct location 
-[ ] select the right yaml file with a single topic prompt (nice to have?)
 [ ] git commit and push cheatsheet pdf once completed
+[ ] local tool that renders an mp3 of text-to-voice recording of transcript?
+[ ] save transcript and voiecover recording in same designated subdir as cheatsheet, once validated
+[ ] identify points to learn more about async and shared state protection
 
 ## 🧪 Today's Testing Tasks
 [x] Fix API error in main.py (client.responses.create doesn't exist)
@@ -20,6 +24,8 @@
 [ ] Validate API response format and content
 [ ] Write unit tests for api_utils functions
 [ ] Add error handling for API failures
+[ ] Test nightly? - how does that work?
+[ ] build?
 
 ## 🏗️ Architecture & Design Improvements
 [ ] Implement dependency injection pattern
@@ -30,6 +36,7 @@
 [x] Create abstract base classes for extensibility
 [x] Refactor so that I don't need a topic file in order to call this, we could just have a string 'bash', and remove the irrelevant sections of the main prompt text
 [ ] new cheatsheet for each subtopic - how are these enumerated? Or one cheatsheet per topic split into each subtopics.
+
 
 ## 🛡️ Error Handling & Resilience
 [ ] Implement comprehensive error handling with custom exceptions

@@ -33,8 +33,6 @@ class DefaultPrompt(Prompt):
         except ValueError as e:
             raise ValueError(f"Error setting up default prompt object: {e}")
 
-        self.main_text = self.default()
-
         # Text Components
         self.output_goal: str = """
         A YAML-formatted list of 5 distinct, relevant,
@@ -67,6 +65,24 @@ class DefaultPrompt(Prompt):
         The YAML must contain **exactly 5** unique commands with no duplicates or near-duplicates.\n
         """
 
+        self.voiceover_prompt: str = f"""
+        Additionally, provide a voiceover script that:
+        - Targets professional/aspiring software engineers
+        - Is succinct and clear (2-3 minutes max)
+        - Explains use cases and tips/tricks for each command
+        - Uses conversational, engaging language
+        - Includes practical examples for {self.topic}
+        
+        Format the complete response as:
+        ```yaml
+        [cheatsheet content]
+        ```
+        
+        ```voiceover
+        [voiceover script content]
+        ```
+        """
+
         self.main_text: str = f"""
         You are a {self.role}, brilliant at generating a concise,
         accurate *{self.topic}* cheat sheet of useful commands for professional developers,
@@ -80,6 +96,8 @@ class DefaultPrompt(Prompt):
         If documentation is unavailable, do **not** include that command.
         """
 
+        self.main_text = self.default()
+
     def default(self):
         # ex = yaml.safe_load(self.example_cheatsheet)
 
@@ -90,6 +108,7 @@ class DefaultPrompt(Prompt):
             "format_instructions",
             "additional_reqs",
             "output_goal",
+            "voiceover_prompt",
         ]
         l = [getattr(self, i) for i in t]
         return "\n".join(l)
