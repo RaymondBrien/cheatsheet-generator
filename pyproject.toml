@@ -9,4 +9,4 @@ markers =[
 ]
 testpaths=["tests"]
 pythonpath=["."]
-addopts = "-v --disable-warnings"
+addopts = "-v --disable-warnings --cov=. --cov-report=html"
