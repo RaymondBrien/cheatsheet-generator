@@ -69,6 +69,47 @@ def test_default_prompt_contains_main_text_components():
     assert default_prompt.format_instructions in default_text
 
 
+def test_default_prompt_contains_voiceover_prompt():
+    """Test that the voiceover prompt is included in the main text."""
+    default_prompt = DefaultPrompt(topic='test topic')
+    default_text = default_prompt.default()
+    
+    # Check that voiceover prompt is included
+    assert default_prompt.voiceover_prompt in default_text, "Voiceover prompt should be included in main text"
+    
+    # Check that voiceover prompt contains expected content
+    voiceover_text = default_prompt.voiceover_prompt
+    assert "voiceover script" in voiceover_text.lower(), "Voiceover prompt should mention voiceover script"
+    assert "professional/aspiring software engineers" in voiceover_text, "Voiceover prompt should target developers"
+    assert "2-3 minutes max" in voiceover_text, "Voiceover prompt should specify duration"
+    assert "use cases and tips/tricks" in voiceover_text, "Voiceover prompt should mention use cases"
+    assert "conversational, engaging language" in voiceover_text, "Voiceover prompt should specify language style"
+    assert "test_topic" in voiceover_text, "Voiceover prompt should include the topic name"
+
+
+def test_voiceover_prompt_formatting():
+    """Test that the voiceover prompt includes proper formatting instructions."""
+    default_prompt = DefaultPrompt(topic='bash')
+    voiceover_text = default_prompt.voiceover_prompt
+    
+    # Check for proper formatting instructions
+    assert "```yaml" in voiceover_text, "Voiceover prompt should include YAML formatting"
+    assert "```voiceover" in voiceover_text, "Voiceover prompt should include voiceover formatting"
+    assert "[cheatsheet content]" in voiceover_text, "Voiceover prompt should show cheatsheet placeholder"
+    assert "[voiceover script content]" in voiceover_text, "Voiceover prompt should show voiceover placeholder"
+
+
+def test_voiceover_prompt_topic_specific():
+    """Test that the voiceover prompt is topic-specific."""
+    bash_prompt = DefaultPrompt(topic='bash')
+    python_prompt = DefaultPrompt(topic='python')
+    
+    # Check that each prompt includes its specific topic
+    assert "bash" in bash_prompt.voiceover_prompt, "Bash prompt should include 'bash' topic"
+    assert "python" in python_prompt.voiceover_prompt, "Python prompt should include 'python' topic"
+    
+    # Check that the prompts are different (topic-specific)
+    assert bash_prompt.voiceover_prompt != python_prompt.voiceover_prompt, "Prompts should be topic-specific"
 
 
 @pytest.mark.api_test
