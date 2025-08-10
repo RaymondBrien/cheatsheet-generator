@@ -1,1 +1,0 @@
-MAX_TOKENS: int = 10_000

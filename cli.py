@@ -6,15 +6,14 @@ CLI interface for the cheatsheet generator.
 # sys.path.append(str(Path(__file__).resolve().parent))
 
 import argparse
-import shutil
 import sys
 import re
 import yaml
 
 from pathlib import Path
 from main import main as run_generator
+from config.lib_config import CHEATSHEET_DIR
 
-CHEATSHEET_DIR = Path.cwd() / "cheatsheets"  # assumes this file is in root
 
 def create_parser():
     """Create and configure the argument parser."""
@@ -63,8 +62,6 @@ def make_version() -> str:
     """Generate a version string based on the current date."""
     from datetime import datetime
     return str(datetime.now().strftime("%Y%m%d_%H%M%S"))
-
-CHEATSHEET_DIR = Path.cwd() / "outputs" / "cheatsheets"
 
 def save_cheatsheet(response: str, topic: str):
     """Save the generated cheatsheet to a YAML file."""
@@ -152,7 +149,7 @@ def main():
     dry_run = not args.live
     
     if args.verbose:
-        print(f"🔧 CLI Arguments:")
+        print("🔧 CLI Arguments:")
         print(f"   Dry run: {dry_run}")
         print(f"   Topic: {args.topic}")
         print(f"   Verbose: {args.verbose}")
@@ -167,9 +164,9 @@ def main():
         if not dry_run:
             saved_files = save_response_data(response, args.topic)
             if len(saved_files) == 2 and saved_files[1]:
-                print(f"✅ Saved both cheatsheet and voiceover script")
+                print("✅ Saved both cheatsheet and voiceover script")
             else:
-                print(f"✅ Saved cheatsheet only")
+                print("✅ Saved cheatsheet only")
 
     except KeyboardInterrupt:
         print("\n⚠️  Operation cancelled by user")

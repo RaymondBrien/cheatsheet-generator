@@ -5,7 +5,7 @@ from typing import Union, Optional
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from API_CONFIG import MAX_TOKENS
+from config.API_CONFIG import MAX_TOKENS
 from prompt_templates.default_prompt import DefaultPrompt
 
 

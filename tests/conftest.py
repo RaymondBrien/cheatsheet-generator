@@ -1,11 +1,40 @@
 import os
 import pytest
 import yaml
+from unittest.mock import Mock, patch
 
 from pathlib import Path
 
-from cli import CHEATSHEET_DIR, make_version
+# Fix import path - use relative import from project root
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from config.lib_config import CHEATSHEET_DIR
+
+# =========== MOCK ENV ==============
+# Mock the Anthropic client for tests
+@pytest.fixture(autouse=True)
+def mock_anthropic_client():
+    """Mock the Anthropic client to avoid API calls during tests."""
+    with patch('anthropic.Anthropic') as mock_client:
+        mock_client.return_value = Mock()
+        yield mock_client
+
+@pytest.fixture(autouse=True)
+def mock_env_setup():
+    """Mock environment setup to avoid requiring real API keys during tests."""
+    # Patch at the module level where it's imported
+    with patch('prompt_templates.BasePrompt.setup_anthropic_environment') as mock_setup:
+        mock_setup.return_value = True
+        yield mock_setup
+
+@pytest.fixture(autouse=True)
+def mock_os_env():
+    """Mock environment variables for tests."""
+    with patch.dict(os.environ, {'ANTHROPIC_API_KEY': 'test-key'}):
+        yield
+
+# =========== MOCK CHEATSHEETS ==============
 @pytest.fixture
 def sample_yaml_cheatsheet():
     example_cheatsheet = Path("prompt_templates/example_cheatsheet.yml")
@@ -31,7 +60,7 @@ def dict_to_yaml():
 @pytest.fixture(scope="function")
 def sample_topic_file():
     """Fixture to provide a topic file path."""
-    yield Path(f"topics/test_topic_file.yml")
+    yield Path("topics/test_topic_file.yml")
 
 @pytest.fixture
 def local_generated_cheatsheets():
@@ -72,3 +101,19 @@ def cheatsheet_file_factory():
             print(f"Cleaned up test file: {expected_filepath}")
 
     return _create_cheatsheet_file
+
+@pytest.fixture
+def test_default_prompt_class():
+    """Provide a test-friendly DefaultPrompt class that doesn't initialize API client."""
+    from prompt_templates.default_prompt import DefaultPrompt
+    from prompt_templates.prompt_config import Role
+    
+    class TestDefaultPrompt(DefaultPrompt):
+        def __init__(self, topic='test'):
+            # Skip parent __init__ to avoid API client initialization
+            self.role = Role().default
+            self.topic = self.validate_topic(topic)
+            self.topic_file = self.match_topic_file(self.topic)
+            self._initialize_prompt_content()
+    
+    return TestDefaultPrompt

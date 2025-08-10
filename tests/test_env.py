@@ -13,7 +13,6 @@ from utils.env_loader import (
     create_env_template,
     find_env_file,
     get_anthropic_api_key,
-    load_environment_variables,
     setup_anthropic_environment,
     validate_api_key,
 )

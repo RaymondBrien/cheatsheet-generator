@@ -7,13 +7,14 @@
 [x] save received response in outputs/cheatsheets (mocked up with yaml so do markdown version later, just save a file first)
 [ ] makefile create template topic card with subtopics - or cookiecutter
 [ ] poetry for easier deps management
-[ ] validate each command?
-[ ] request a second response (or two parts of one response for single api call) which returns an accompanying voiceover-script
+[x] validate each command?
+[x] request a second response (or two parts of one response for single api call) which returns an accompanying voiceover-script
 [ ] check cheatsheets are uploaded correctly and saved in correct location 
 [ ] git commit and push cheatsheet pdf once completed
 [ ] local tool that renders an mp3 of text-to-voice recording of transcript?
 [ ] save transcript and voiecover recording in same designated subdir as cheatsheet, once validated
 [ ] identify points to learn more about async and shared state protection
+[ ] each topic should have its own dir - requires some refactoring later
 
 ## 🧪 Today's Testing Tasks
 [x] Fix API error in main.py (client.responses.create doesn't exist)
@@ -21,7 +22,7 @@
 [x] Create CLI interface for easier testing
 [x] Test dry run mode to validate prompt content
 [x] Test first live API call with bash topic
-[ ] Validate API response format and content
+[x] Validate API response format and content
 [ ] Write unit tests for api_utils functions
 [ ] Add error handling for API failures
 [ ] Test nightly? - how does that work?

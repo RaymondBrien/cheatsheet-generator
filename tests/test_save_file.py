@@ -3,7 +3,6 @@ import os
 import re
 import yaml
 
-from datetime import datetime
 from pathlib import Path
 
 from cli import save_cheatsheet, save_voiceover_script, save_response_data, CHEATSHEET_DIR, make_version
@@ -94,7 +93,7 @@ def test_saved_file_contains_correct_content(cheatsheet_file_factory, sample_yam
             expected_content = yaml.safe_load(expected_yaml_content)
             
             # Compare parsed YAML structures
-            assert saved_content == expected_content, f"YAML content mismatch"
+            assert saved_content == expected_content, "YAML content mismatch"
             
         except Exception as e:
             pytest.fail(f"Error reading file {filepath}: {e}")

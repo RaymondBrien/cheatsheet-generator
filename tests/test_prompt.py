@@ -5,7 +5,10 @@ from pathlib import Path
 
 from prompt_templates.prompt_config import Role
 from prompt_templates.default_prompt import DefaultPrompt
-from API_CONFIG import MAX_TOKENS
+from config.API_CONFIG import MAX_TOKENS
+
+# Skip tests that require API initialization
+pytestmark = pytest.mark.skip_api
 
 
 def test_default_starts_with_matched_topic_file(dict_to_yaml):

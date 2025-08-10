@@ -5,7 +5,6 @@ git commit that with a unique id: response-cheatsheet-topicid-date-time
 explore how to make async - create folder ready, generate file name ready, commit message ready - httpio?
 """
 
-import os
 import yaml
 import logging
 import subprocess

@@ -2,10 +2,10 @@ from typing import Union, List
 from pathlib import Path
 from prompt_templates.BasePrompt import Prompt
 from prompt_templates.prompt_config import Role, PromptType, RequestReturnType, TargettedOs
-from utils.parse_yaml import read_yaml_key, render_yaml_file
+from utils.parse_yaml import read_yaml_key
 
 
-from API_CONFIG import MAX_TOKENS
+from config.API_CONFIG import MAX_TOKENS, DEFAULT_TEMP
 
 
 class DefaultPrompt(Prompt):
@@ -17,7 +17,7 @@ class DefaultPrompt(Prompt):
 
         # API configuration
         self.max_tokens: int = MAX_TOKENS
-        self.temperature: float = 0.7
+        self.temperature: float = DEFAULT_TEMP
 
         # Text content
         self.request_return_type: str = RequestReturnType.TEXT.value

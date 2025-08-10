@@ -4,7 +4,6 @@ from enum import Enum
 
 import yaml
 
-from API_CONFIG import MAX_TOKENS
 
 
 class Role:
