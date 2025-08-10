@@ -15,7 +15,11 @@
 [x] local tool that renders an mp3 of text-to-voice recording of transcript?
 [ ] save transcript and voiecover recording in same designated subdir as cheatsheet, once validated
 [ ] identify points to learn more about async and shared state protection
+[ ] start to make faster now!
+[ ] update docs and add async testing
+[ ] find all areas to reduce DRY, use async and speed up process, multithreading and multiprocessing could be good here: multithreading for API request whilst doing the prep of file names etc, multiprocessing to then make the files, move them and generate the audio after, as well as another thread to upload. Discover how to test timings so I can see if doing async/multi[thread/processing] makes an impact on timing. Also httpio async version (what's it called?) will help here possibly - op to learn!
 [ ] each topic should have its own dir - requires some refactoring later
+[ ] sort voiceoverscript subdir vs transcripts - is some code only expecting one and then writing it to voiceover-scripts instead? Just keep voiceover_scripts
 
 ## 🧪 Today's Testing Tasks
 [x] Fix API error in main.py (client.responses.create doesn't exist)

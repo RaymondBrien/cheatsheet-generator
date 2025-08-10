@@ -124,6 +124,7 @@ def main(topic: str, dry_run: bool = True) -> Union[str, dict[str, str]]:
                         voiceover_script = voiceover_match.group(1)
                         print(f"🎤 Voiceover script found:\n {voiceover_script[:100]}...")
 
+
                     break
             
             # If no cheatsheet content found, set a default response

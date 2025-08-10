@@ -15,7 +15,7 @@ from main import main as run_generator
 from config.lib_config import CHEATSHEET_DIR
 from utils.general_utils import make_version
 from utils.file_management import save_response_data, save_cheatsheet, save_voiceover_script
-from utils.voiceover import generate_dry_run_voiceover
+from utils.voiceover import generate_dry_run_voiceover, generate_voiceover
 
 # ============ CLI ARGUMENTS =================
 
@@ -108,6 +108,10 @@ def main():
         
         if not dry_run:
             saved_files = save_response_data(response, args.topic)
+            if args.voiceover:
+                # Generate voiceover script if not in dry run mode
+                voiceover_file = generate_voiceover(response, args.topic)
+                saved_files.append(voiceover_file)
             if len(saved_files) == 2 and saved_files[1]:
                 print("✅ Saved both cheatsheet and voiceover script")
             else:

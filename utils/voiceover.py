@@ -4,11 +4,13 @@ Voiceover generation utilities using pyttsx3.
 """
 
 import pyttsx3
+from typing import Union
 from pathlib import Path
+
 from utils.general_utils import make_version
 
 
-def generate_voiceover(text: str, topic: str = "test") -> Path:
+def generate_voiceover(content: Union[str, Path], topic: str) -> Path:
     """
     Generate voiceover recording using pyttsx3.
     
@@ -20,6 +22,7 @@ def generate_voiceover(text: str, topic: str = "test") -> Path:
         Path to the generated audio file
     """
     # Use existing pattern from file_management.py
+    # TODO DRY, this file name stuff is already handled somewhere else - get it from there instead!)
     output_dir = Path("outputs/transcript-audio")
     output_dir.mkdir(parents=True, exist_ok=True)
     
@@ -28,14 +31,18 @@ def generate_voiceover(text: str, topic: str = "test") -> Path:
     
     try:
         print(f"🎵 Generating voiceover for topic: {topic}")
-        print(f"📝 Text length: {len(text)} characters")
+        if isinstance(content, Path):
+            with content.open('r') as f:
+                content = f.read()
+
+        print(f"📝 Content length: {len(content)} characters")
         
         # Minimal TTS setup - just the essentials
         engine = pyttsx3.init()
         engine.setProperty('rate', 150)
         engine.setProperty('volume', 0.9)
         
-        engine.save_to_file(text, str(output_path))
+        engine.save_to_file(content, str(output_path))
         engine.runAndWait()
         
         # Verify file was created (reusing pattern from file_management.py)

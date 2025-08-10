@@ -93,7 +93,10 @@ def save_voiceover_script(voiceover_content: str, topic: str):
 
 
 def save_response_data(response_data, topic: str):
-    """Save both cheatsheet and voiceover script if available."""
+    """
+    Save both cheatsheet and voiceover script if available.
+    Generate a voiceover wav file from the voiceover script if available.
+    """
     if isinstance(response_data, dict):
         cheatsheet_content = response_data.get("cheatsheet", "")
         voiceover_content = response_data.get("voiceover", "")
@@ -104,6 +107,7 @@ def save_response_data(response_data, topic: str):
         # Save voiceover script if available
         if voiceover_content:
             voiceover_file = save_voiceover_script(voiceover_content, topic)
+            generate_voiceover(voiceover_file, topic)  # Generate voiceover wav file
             return cheatsheet_file, voiceover_file
         else:
             return cheatsheet_file, None
