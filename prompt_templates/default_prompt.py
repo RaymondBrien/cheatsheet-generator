@@ -83,7 +83,16 @@ class DefaultPrompt(Prompt):
         ```
         """
 
-        self.main_text: str = f"""
+        self.main_text = self.default()
+
+    def default(self):
+        # ex = yaml.safe_load(self.example_cheatsheet)
+
+        # self.topic = ex.keys()
+        # self.subtopic = ex.values()
+        
+        # Main text content
+        main_text_content = f"""
         You are a {self.role}, brilliant at generating a concise,
         accurate *{self.topic}* cheat sheet of useful commands for professional developers,
         particularly focussing on the following subtopics: {self.subtopics}.
@@ -95,20 +104,14 @@ class DefaultPrompt(Prompt):
 
         If documentation is unavailable, do **not** include that command.
         """
-
-        self.main_text = self.default()
-
-    def default(self):
-        # ex = yaml.safe_load(self.example_cheatsheet)
-
-        # self.topic = ex.keys()
-        # self.subtopic = ex.values()
-        t = [
-            "main_text",
-            "format_instructions",
-            "additional_reqs",
-            "output_goal",
-            "voiceover_prompt",
+        
+        # Combine all components
+        components = [
+            main_text_content,
+            self.format_instructions,
+            self.additional_reqs,
+            self.output_goal,
+            self.voiceover_prompt,
         ]
-        l = [getattr(self, i) for i in t]
-        return "\n".join(l)
+        
+        return "\n".join(components)
