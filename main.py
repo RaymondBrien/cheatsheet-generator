@@ -1,19 +1,19 @@
 import sys
 import re
 from pathlib import Path
-from typing import Union
+from typing import Union, Optional
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from prompt_templates.default_prompt import Prompt, DefaultPrompt
-from prompt_templates.prompt_config import Role, PromptType
+from API_CONFIG import MAX_TOKENS
+from prompt_templates.default_prompt import DefaultPrompt
 
 
 def get_default_prompt(topic: str) -> DefaultPrompt:
     """Return a DefaultPrompt object initialized with the specified topic."""
     return DefaultPrompt(topic=topic)
 
-def validate_prompt_content(prompt) -> bool:
+def validate_prompt_content(prompt, required_fields: Optional[list[str]]) -> bool:
     """Validate that the prompt has all required content for API call."""
     required_fields = ['role', 'main_text', 'prompt_type']
     
@@ -84,7 +84,7 @@ def main(topic: str, dry_run: bool = True) -> Union[str, dict[str, str]]:
             client = prompt.client
             message = client.messages.create(
                 model="claude-3-7-sonnet-20250219",  # Updated to valid model
-                max_tokens=1000,
+                max_tokens=MAX_TOKENS,
                 temperature=1,
                 system=str(prompt.main_text),  # Fixed: use main_text as system prompt
                 messages=[
