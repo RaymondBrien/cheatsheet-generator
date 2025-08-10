@@ -992,5 +992,5 @@ test = ["pytest", "pytest-cov", "pytest-html", "pytest-mock"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.11"
-content-hash = "bc15ad0a5090d8789471083653e4136c11dd5cec64e5fba0bcd3d206e2c9770f"
+python-versions = ">=3.12"
+content-hash = "e17941186191cc50ecc084bf61f9e0a62159b4e6b19b8cfd344262122d181cf4"

@@ -6,8 +6,34 @@ import re
 import yaml
 
 from pathlib import Path
+
 from config.lib_config import CHEATSHEET_DIR
 from utils.general_utils import make_version
+from typing import TypeVar, Any
+
+
+def get_expected_filename(topic: str, artefact: Any) -> str:
+    """
+    Generate expected filename for cheatsheet or voiceover script based on topic and current version.
+    Args:
+        artefact (str): The type of artefact: "cheatsheet" or "voiceover_script".
+    Returns:
+        str: The expected filename for the cheatsheet or voiceover script.
+
+    """
+    if not topic:
+        raise ValueError("Topic must be provided to generate filename.")
+
+    topic = validate_topic_name(topic)
+    version = make_version()
+
+    if artefact.name == ("cheatsheet" or "cs"):
+        suffix = 'yml'
+    elif artefact.name == ("voiceover_script" or "v"):
+        suffix = 'txt'
+    return f"{topic}_{artefact.name}_{version}.{suffix}"
+
+
 
 def save_cheatsheet(response: str, topic: str):
     """Save the generated cheatsheet to a YAML file."""
@@ -85,3 +111,23 @@ def save_response_data(response_data, topic: str):
         # Handle string response (backward compatibility)
         cheatsheet_file = save_cheatsheet(response_data, topic)
         return cheatsheet_file, None
+
+
+def sanitise_topic_name(topic: str) -> str:
+    """
+    Sanitise string name, find a matching topic file,
+    and validate the topic key's value matches the topic
+    string specified.
+    If no topic file exists, return self.topic name as none.
+    """
+    if not topic or topic.strip() == "":
+        raise ValueError("Topic cannot be empty or None.")
+    if isinstance(topic, str) and len(topic) < 1:
+        raise ValueError("Topic must be at least 1 character long.")
+
+    # check if topic is empty after sanitisation
+    if not topic.strip():
+        raise ValueError("Topic cannot be empty after sanitisation.")
+
+    topic = str(topic).replace(" ", "_").lower().strip()  # strip after to avoid leading/trailing spaces and catch any empty strings
+    return topic

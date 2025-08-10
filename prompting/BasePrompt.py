@@ -13,8 +13,10 @@ import prompting.prompt_config as prompt_config
 from .prompt_config import PromptType, RequestReturnType, TargettedOs
 from utils.env_loader import setup_anthropic_environment
 from utils.parse_yaml import read_yaml_key, render_yaml_file
+from utils.file_management import sanitise_topic_name
 
-TOPIC_DIR: Path = Path("topics")  # Directory where topic files are stored
+
+
 
 
 class Prompt:
@@ -33,7 +35,7 @@ class Prompt:
         self.targetted_os: TargettedOs = None
         self.request_return_type: RequestReturnType = None
         self.example_cheatsheet: Path = None
-        self.topic: str = ""
+        self.topic: str = ""  # TODO field? Shared state warning (and other empty strings and lists on init...!)
         self.subtopic: List[str] = ""
         self.topic_file: Union[Path, None] = None
         self.topic_docs: Union[str, List[str]] = ""
@@ -82,28 +84,10 @@ class Prompt:
         self.prompt_type = PromptType.TEXT
 
     def validate_topic(self, topic: str) -> str:
-        """Sanitise string name, find a matching topic file, and validate the topic key's value matches the topic string specified. If no topic file exists, return self.topic name as none."""
-        if not topic or topic.strip() == "":
-            raise ValueError("Topic cannot be empty or None.")
-        if isinstance(topic, str) and len(topic) < 1:
-            raise ValueError("Topic must be at least 1 character long.")
-
-        topic = self.sanitise_topic_name(topic)
+        topic = sanitise_topic_name(topic)
         if not self.match_topic_file(topic):
             self.topic_file = None
         return topic
-
-    def sanitise_topic_name(self, topic: str) -> str:
-        """Sanitise topic name by replacing spaces with underscores and converting to lowercase."""
-        topic = str(topic).replace(" ", "_").lower().strip()  # strip after to avoid leading/trailing spaces and catch any empty strings
-        # check topic contains chars
-
-        # check if topic is empty after sanitisation
-        if not topic:
-            raise ValueError("Topic cannot be empty after sanitisation.")
-        print(f"Sanitised topic name: {topic}")
-        return topic
-
 
     def validate_topic_file(self, topic: str, topic_file: Path) -> Path:
         """Validate that the topic file exists and matches the topic."""

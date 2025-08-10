@@ -15,6 +15,7 @@ from main import main as run_generator
 from config.lib_config import CHEATSHEET_DIR
 from utils.general_utils import make_version
 from utils.file_management import save_response_data, save_cheatsheet, save_voiceover_script
+from utils.voiceover import generate_dry_run_voiceover
 
 # ============ CLI ARGUMENTS =================
 
@@ -28,6 +29,7 @@ Examples:
   python cli.py --topic bash --dry-run              # Test prompt without API call
   python cli.py --topic bash --live                 # Make actual API call
   python cli.py --topic python --verbose            # Verbose output
+  python cli.py --topic bash --dry-run --voiceover  # Dry run with voiceover recording
   python cli.py --help                              # Show this help message
         """
     )
@@ -58,6 +60,12 @@ Examples:
         help="Enable verbose output"
     )
     
+    parser.add_argument(
+        "--voiceover",
+        action="store_true",
+        help="Generate voiceover recording during dry run"
+    )
+    
     return parser
 
 
@@ -74,6 +82,7 @@ def main():
         print(f"   Dry run: {dry_run}")
         print(f"   Topic: {args.topic}")
         print(f"   Verbose: {args.verbose}")
+        print(f"   Voiceover: {args.voiceover}")
     
     try:
         # Run the generator with topic argument
@@ -82,6 +91,21 @@ def main():
 
         if not response:
             raise RuntimeError("No response generated, exited")
+            
+        # Generate voiceover during dry run if requested
+        if dry_run and args.voiceover:
+            print("\n🎵 Generating voiceover recording for dry run...")
+            try:
+                # Get prompt text from the response for voiceover generation
+                prompt_text = response if isinstance(response, str) else str(response)
+                voiceover_file = generate_dry_run_voiceover(args.topic, prompt_text)
+                print(f"🎤 Voiceover recording completed: {voiceover_file}")
+            except Exception as e:
+                print(f"⚠️  Voiceover generation failed: {e}")
+                if args.verbose:
+                    import traceback
+                    traceback.print_exc()
+        
         if not dry_run:
             saved_files = save_response_data(response, args.topic)
             if len(saved_files) == 2 and saved_files[1]:

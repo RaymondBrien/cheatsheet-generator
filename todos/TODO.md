@@ -1,17 +1,18 @@
 # TODO - Cheatsheet Generator Improvements
 
 ## 🚀 High Priority - Core Functionality
+
 [x] send basic prompt
 [x] test api connection first
 [x] send first request for bash cheatsheet
 [x] save received response in outputs/cheatsheets (mocked up with yaml so do markdown version later, just save a file first)
 [ ] makefile create template topic card with subtopics - or cookiecutter
-[ ] poetry for easier deps management
+[x] poetry for easier deps management
 [x] validate each command?
 [x] request a second response (or two parts of one response for single api call) which returns an accompanying voiceover-script
 [ ] check cheatsheets are uploaded correctly and saved in correct location 
 [ ] git commit and push cheatsheet pdf once completed
-[ ] local tool that renders an mp3 of text-to-voice recording of transcript?
+[x] local tool that renders an mp3 of text-to-voice recording of transcript?
 [ ] save transcript and voiecover recording in same designated subdir as cheatsheet, once validated
 [ ] identify points to learn more about async and shared state protection
 [ ] each topic should have its own dir - requires some refactoring later
