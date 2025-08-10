@@ -24,7 +24,7 @@ def mock_anthropic_client():
 def mock_env_setup():
     """Mock environment setup to avoid requiring real API keys during tests."""
     # Patch at the module level where it's imported
-    with patch('prompt_templates.BasePrompt.setup_anthropic_environment') as mock_setup:
+    with patch('prompting.BasePrompt.setup_anthropic_environment') as mock_setup:
         mock_setup.return_value = True
         yield mock_setup
 
@@ -37,7 +37,7 @@ def mock_os_env():
 # =========== MOCK CHEATSHEETS ==============
 @pytest.fixture
 def sample_yaml_cheatsheet():
-    example_cheatsheet = Path("prompt_templates/example_cheatsheet.yml")
+    example_cheatsheet = Path("prompting/example_cheatsheet.yml")
     if example_cheatsheet is not None:
         return example_cheatsheet
     else:
@@ -105,8 +105,8 @@ def cheatsheet_file_factory():
 @pytest.fixture
 def test_default_prompt_class():
     """Provide a test-friendly DefaultPrompt class that doesn't initialize API client."""
-    from prompt_templates.default_prompt import DefaultPrompt
-    from prompt_templates.prompt_config import Role
+    from prompting.default_prompt import DefaultPrompt
+    from prompting.prompt_config import Role
     
     class TestDefaultPrompt(DefaultPrompt):
         def __init__(self, topic='test'):

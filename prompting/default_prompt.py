@@ -1,7 +1,7 @@
 from typing import Union, List
 from pathlib import Path
-from prompt_templates.BasePrompt import Prompt
-from prompt_templates.prompt_config import Role, PromptType, RequestReturnType, TargettedOs
+from prompting.BasePrompt import Prompt
+from prompting.prompt_config import Role, PromptType, RequestReturnType, TargettedOs
 from utils.parse_yaml import read_yaml_key
 
 
@@ -113,5 +113,5 @@ class DefaultPrompt(Prompt):
             self.output_goal,
             self.voiceover_prompt,
         ]
-        
+
         return "\n".join(components)

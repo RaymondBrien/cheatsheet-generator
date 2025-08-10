@@ -3,8 +3,8 @@ import pytest
 import anthropic
 from pathlib import Path
 
-from prompt_templates.prompt_config import Role
-from prompt_templates.default_prompt import DefaultPrompt
+from prompting.prompt_config import Role
+from prompting.default_prompt import DefaultPrompt
 from config.API_CONFIG import MAX_TOKENS
 
 # Skip tests that require API initialization
@@ -76,10 +76,10 @@ def test_default_prompt_contains_voiceover_prompt():
     """Test that the voiceover prompt is included in the main text."""
     default_prompt = DefaultPrompt(topic='test topic')
     default_text = default_prompt.default()
-    
+
     # Check that voiceover prompt is included
     assert default_prompt.voiceover_prompt in default_text, "Voiceover prompt should be included in main text"
-    
+
     # Check that voiceover prompt contains expected content
     voiceover_text = default_prompt.voiceover_prompt
     assert "voiceover script" in voiceover_text.lower(), "Voiceover prompt should mention voiceover script"
@@ -110,7 +110,7 @@ def test_voiceover_prompt_topic_specific():
     # Check that each prompt includes its specific topic
     assert "bash" in bash_prompt.voiceover_prompt, "Bash prompt should include 'bash' topic"
     assert "python" in python_prompt.voiceover_prompt, "Python prompt should include 'python' topic"
-    
+
     # Check that the prompts are different (topic-specific)
     assert bash_prompt.voiceover_prompt != python_prompt.voiceover_prompt, "Prompts should be topic-specific"
 

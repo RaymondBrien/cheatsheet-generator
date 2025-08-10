@@ -9,7 +9,7 @@ from typing import Union, List, Optional
 
 import anthropic
 
-import prompt_templates.prompt_config as prompt_config
+import prompting.prompt_config as prompt_config
 from .prompt_config import PromptType, RequestReturnType, TargettedOs
 from utils.env_loader import setup_anthropic_environment
 from utils.parse_yaml import read_yaml_key, render_yaml_file

@@ -6,26 +6,27 @@ from typing import Union, Optional
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from config.API_CONFIG import MAX_TOKENS
-from prompt_templates.default_prompt import DefaultPrompt
+from prompting.default_prompt import DefaultPrompt
 
 
 def get_default_prompt(topic: str) -> DefaultPrompt:
     """Return a DefaultPrompt object initialized with the specified topic."""
     return DefaultPrompt(topic=topic)
 
-def validate_prompt_content(prompt, required_fields: Optional[list[str]]) -> bool:
+def validate_prompt_content(prompt, required_fields: Optional[list[str]] = None) -> bool:
     """Validate that the prompt has all required content for API call."""
-    required_fields = ['role', 'main_text', 'prompt_type']
-    
+    if not required_fields:
+        required_fields = ['role', 'main_text', 'prompt_type']
+
     for field in required_fields:
         if not hasattr(prompt, field) or not getattr(prompt, field):
             print(f"❌ Missing required field: {field}")
             return False
-    
+
     if len(prompt.main_text) < 10:
         print(f"❌ Prompt text too short: {len(prompt.main_text)} characters")
         return False
-    
+
     print("✅ Prompt validation passed")
     print(f"   Role: {prompt.role}")
     print(f"   Type: {prompt.prompt_type}")
@@ -55,7 +56,7 @@ def main(topic: str, dry_run: bool = True) -> Union[str, dict[str, str]]:
     
     # Initialize response variable at the top
     response: Union[str, dict[str, str]] = ""
-    
+
     try:
         # Ensure environment is loaded before creating prompt
         if not dry_run:
@@ -111,24 +112,24 @@ def main(topic: str, dry_run: bool = True) -> Union[str, dict[str, str]]:
             for block in message.content:
                 if hasattr(block, 'text'):
                     full_response = block.text
-                    
+
                     # Extract cheatsheet and voiceover
                     cheatsheet_match = re.search(r'```yaml\s*(.*?)\s*```', full_response, re.DOTALL)
                     voiceover_match = re.search(r'```voiceover\s*(.*?)\s*```', full_response, re.DOTALL)
-                    
+
                     if cheatsheet_match:
                         response_content = cheatsheet_match.group(1)
                         print(f"📄 Cheatsheet content found:\n {response_content[:100]}...")
                     if voiceover_match:
                         voiceover_script = voiceover_match.group(1)
                         print(f"🎤 Voiceover script found:\n {voiceover_script[:100]}...")
-                    
+
                     break
             
             # If no cheatsheet content found, set a default response
             if not response_content:
                 response_content = "No cheatsheet content found in API response"
-            
+
             # Return both cheatsheet and voiceover
             response = {
                 "cheatsheet": response_content,

@@ -1,83 +1,82 @@
 # Text-to-Speech Options for Python
 
-## Overview
-# "For local text-to-speech generation without heavy dependencies or subscription requirements."
+# Overview
+"For local text-to-speech generation without heavy dependencies or subscription requirements."
 
-# ## Option 1: pyttsx3 (RECOMMENDED FOR START)
-# # Installation: pip install pyttsx3
-# """
-# PROS:
-# - Lightweight, uses system TTS engines
-# - No internet required, works cross-platform
-# - Simple API, immediate generation
+## Option 1: pyttsx3 (RECOMMENDED FOR START)
+# Installation: pip install pyttsx3
+"""
+PROS:
+- Lightweight, uses system TTS engines
+- No internet required, works cross-platform
+- Simple API, immediate generation
 
-# CONS:
-# - Voice quality depends on system voices (can be robotic)
+CONS:
+- Voice quality depends on system voices (can be robotic)
 
-# BEST FOR: Quick implementation, testing, lightweight applications
-# """
+BEST FOR: Quick implementation, testing, lightweight applications
+"""
 
-# import os
-# import pyttsx3
+import pyttsx3
 
-# def generate_tts_pyttsx3(text, output_path="output.wav"):
-#     """Generate TTS using pyttsx3 (system voices)"""
-#     engine = pyttsx3.init()
+def generate_tts_pyttsx3(text, output_path="output.wav"):
+    """Generate TTS using pyttsx3 (system voices)"""
+    engine = pyttsx3.init()
 
-#     # Optional: Configure voice settings
-#     voices = engine.getProperty('voices')
-#     print(f"Available voices: {len(voices)}")
-#     print("Voice options:")
-#     for i, voice in enumerate(voices):
-#         print(f"{i}: {voice.name} ({voice.languages})")
+    # Optional: Configure voice settings
+    voices = engine.getProperty('voices')
+    print(f"Available voices: {len(voices)}")
+    print("Voice options:")
+    for i, voice in enumerate(voices):
+        print(f"{i}: {voice.name} ({voice.languages})")
 
-#     if voices:
-#         engine.setProperty('voice', voices[0].id)  # Use first available voice
+    if voices:
+        engine.setProperty('voice', voices[0].id)  # Use first available voice
     
-#     engine.setProperty('rate', 150)    # Speed of speech
-#     engine.setProperty('volume', 0.9)  # Volume level (0.0 to 1.0)
+    engine.setProperty('rate', 150)    # Speed of speech
+    engine.setProperty('volume', 0.9)  # Volume level (0.0 to 1.0)
     
-#     engine.save_to_file(text, output_path)
-#     engine.runAndWait()
-#     print(f"Audio saved to: {output_path}")
+    engine.save_to_file(text, output_path)
+    engine.runAndWait()
+    print(f"Audio saved to: {output_path}")
 
 # Example usage:
 # generate_tts_pyttsx3("Hello, this is a test voiceover script.", "voiceover.wav")
 
 
-# Option 2: Coqui TTS (RECOMMENDED FOR QUALITY)
-# Installation: pip install TTS
-"""
-PROS:
-- High-quality neural voices, completely local
-- Open source, professional-grade results
-- Many voice options and languages
+# # Option 2: Coqui TTS (RECOMMENDED FOR QUALITY)
+# # Installation: pip install TTS
+# """
+# PROS:
+# - High-quality neural voices, completely local
+# - Open source, professional-grade results
+# - Many voice options and languages
 
-CONS:
-- ~500MB+ download for models
-- Slower than pyttsx3
-- Heavier dependency
+# CONS:
+# - ~500MB+ download for models
+# - Slower than pyttsx3
+# - Heavier dependency
 
-BEST FOR: Production applications where voice quality matters
-"""
+# BEST FOR: Production applications where voice quality matters
+# """
 
-try:
-    from TTS.api import TTS
+# try:
+#     from TTS.api import TTS
     
-    def generate_tts_coqui(text, output_path="output.wav", model_name="tts_models/en/ljspeech/tacotron2-DDC"):
-        """Generate TTS using Coqui TTS (neural voices)"""
-        # Initialize TTS
-        tts = TTS(model_name=model_name, progress_bar=False)
+#     def generate_tts_coqui(text, output_path="output.wav", model_name="tts_models/en/ljspeech/tacotron2-DDC"):
+#         """Generate TTS using Coqui TTS (neural voices)"""
+#         # Initialize TTS
+#         tts = TTS(model_name=model_name, progress_bar=False)
         
-        # Generate speech
-        tts.tts_to_file(text=text, file_path=output_path)
-        print(f"Audio saved to: {output_path}")
+#         # Generate speech
+#         tts.tts_to_file(text=text, file_path=output_path)
+#         print(f"Audio saved to: {output_path}")
     
-    # Example usage:
-    # generate_tts_coqui("Hello, this is a test voiceover script.", "voiceover.wav")
+#     # Example usage:
+#     # generate_tts_coqui("Hello, this is a test voiceover script.", "voiceover.wav")
     
-except ImportError:
-    print("Coqui TTS not installed. Install with: pip install TTS")
+# except ImportError:
+#     print("Coqui TTS not installed. Install with: pip install TTS")
 
 
 # ## Option 3: espeak-ng (RECOMMENDED FOR CI)
