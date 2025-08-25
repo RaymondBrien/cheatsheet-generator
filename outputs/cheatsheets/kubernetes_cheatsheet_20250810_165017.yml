@@ -1,0 +1,5 @@
+kubectl get pods: "Lists all pods in the current namespace, showing their status, readiness, and age; useful for quickly checking the health of application workloads."
+kubectl describe pod <pod-name>: "Provides detailed information about a specific pod including events, container statuses, and configuration; essential for troubleshooting pod issues."
+kubectl logs <pod-name>: "Fetches and displays logs from a container in a pod, with options for following logs in real-time or viewing previous container instances."
+kubectl apply -f <filename.yaml>: "Creates or updates resources defined in a YAML file; the recommended declarative approach for managing Kubernetes resources."
+kubectl port-forward <pod-name> <local-port>:<pod-port>: "Creates a temporary tunnel between your local machine and a pod, allowing direct access to services running in the pod for testing or debugging."

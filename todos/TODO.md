@@ -1,6 +1,45 @@
 # TODO - Cheatsheet Generator Improvements
 
 ## 🚀 High Priority - Core Functionality
+[ ] Templating: this will be helpful for cheatsheets but also for theoryhub very quick resource generation.
+
+- seperate subrepo
+- tests
+- design
+- components
+- cookiecutter/copier?
+- jinja
+- first template
+- make more abstract
+- reduce deps
+- make separate to add as dep for other projects
+
+
+components:
+
+general design:
+- header
+- footer
+- colors
+- logo
+
+sections:
+- title
+- topic
+- tagline
+- dividers
+- subtopic
+- examples
+- tables
+
+data:
+- date
+- sources
+- copyright
+- version number
+
+
+
 
 [x] send basic prompt
 [x] test api connection first
@@ -20,6 +59,8 @@
 [ ] find all areas to reduce DRY, use async and speed up process, multithreading and multiprocessing could be good here: multithreading for API request whilst doing the prep of file names etc, multiprocessing to then make the files, move them and generate the audio after, as well as another thread to upload. Discover how to test timings so I can see if doing async/multi[thread/processing] makes an impact on timing. Also httpio async version (what's it called?) will help here possibly - op to learn!
 [ ] each topic should have its own dir - requires some refactoring later
 [ ] sort voiceoverscript subdir vs transcripts - is some code only expecting one and then writing it to voiceover-scripts instead? Just keep voiceover_scripts
+[ ] use cookiecutter and start adding more ideas: zoxide, other liked CLI tools
+    - template engines: https://yte-template-engine.github.io/
 
 ## 🧪 Today's Testing Tasks
 [x] Fix API error in main.py (client.responses.create doesn't exist)
