@@ -2,6 +2,7 @@
 name = "cheatsheet-generator"
 version = "0.1.0"
 requires-python = ">=3.11"
+authors = "Raymond Brien"
 description = "A tool to generate cheatsheets from topics and subtopics using CLAUDE"
 dependencies = [
     "anthropic>=0.59.0",
@@ -11,22 +12,36 @@ dependencies = [
     "requests>=2.32.4",
     "pyttsx3 (>=2.99,<3.0)",
     "tool>=0.8.0",
+    "jinja2>=3.1.6",
+    "ruff>=0.12.10",
+    "pandoc>=2.4",
+    "pyspellchecker>=0.8.3",
+    "pytest-cov>=6.2.1",
+    "pytest-mock>=3.14.1",
+    "pytest-html>=4.1.1",
+    "weasyprint>=66.0",
+    "yamllint>=1.37.1",
+    "markdown>=3.8.2",
+    "pygments>=2.19.2",
 ]
 readme = "README.md"
+
+[project.optional-dependencies]
+music = [
+    "music21>=9.1.0",
+    "mido>=1.3.0",          # MIDI file handling
+    "pretty-midi>=0.2.10",  # MIDI processing
+]
+dev = [
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.5.0",
+    "pytest-cov>=4.1.0"
+]
 
 
 [tool.poetry]
 package-mode = false
-
-
-
-[project.optional-dependencies]
-test = [
-    "pytest>=8.4.1",
-    "pytest-cov",
-    "pytest-mock",
-    "pytest-html",
-]
 
 [tool.pytest.ini_options]
 markers =[
@@ -48,3 +63,45 @@ commands = [["pytest"]]
 description = "run type check on code base"
 deps = ["mypy==1.11.2", "types-cachetools>=5.5.0.20240820", "types-chardet>=5.0.4.6"]
 commands = [["mypy", "src{/}tox"], ["mypy", "tests"]]
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+target-version = "py311"  # assume python 3.11
+fix = true
+show-fixes = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.link.flake8-quotes]
+doctring-quotes = "double"
