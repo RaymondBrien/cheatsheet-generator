@@ -1,0 +1,3 @@
+title: "Python Basics Test"
+template: "base/programming_cheatsheet.md.j2"
+language: "python"
