@@ -1,10 +1,11 @@
-from typing import Union, List
 from pathlib import Path
+from typing import List, Union
 
-from config.API_CONFIG import MAX_TOKENS, DEFAULT_TEMP
+from config.API_CONFIG import DEFAULT_TEMP, MAX_TOKENS
 from config.lib_config import TOPIC_DIR
 from prompting.BasePrompt import Prompt
-from prompting.prompt_config import Role, PromptType, RequestReturnType, TargettedOs
+from prompting.prompt_config import (PromptType, RequestReturnType, Role,
+                                     TargettedOs)
 from utils.parse_yaml import read_yaml_key
 
 

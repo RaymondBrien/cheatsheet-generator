@@ -1,23 +1,21 @@
-import sys
 import os
+import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from pathlib import Path
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 import anthropic
 
 import prompting.prompt_config as prompt_config
-from .prompt_config import PromptType, RequestReturnType, TargettedOs
-from utils.env_loader import setup_anthropic_environment
-from utils.parse_yaml import read_yaml_key, render_yaml_file
-from utils.file_management import sanitise_topic_name
 from config.lib_config import TOPIC_DIR
+from utils.env_loader import setup_anthropic_environment
+from utils.file_management import sanitise_topic_name
+from utils.parse_yaml import read_yaml_key, render_yaml_file
 
-
-
+from .prompt_config import PromptType, RequestReturnType, TargettedOs
 
 
 class Prompt:

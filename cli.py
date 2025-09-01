@@ -6,15 +6,17 @@ CLI interface for the cheatsheet generator.
 # sys.path.append(str(Path(__file__).resolve().parent))
 
 import argparse
-import sys
 import re
+import sys
+from pathlib import Path
+
 import yaml
 
-from pathlib import Path
-from main import main as run_generator
 from config.lib_config import CHEATSHEET_DIR
+from main import main as run_generator
+from utils.file_management import (save_cheatsheet, save_response_data,
+                                   save_voiceover_script)
 from utils.general_utils import make_version
-from utils.file_management import save_response_data, save_cheatsheet, save_voiceover_script
 from utils.voiceover import generate_dry_run_voiceover, generate_voiceover
 
 # ============ CLI ARGUMENTS =================

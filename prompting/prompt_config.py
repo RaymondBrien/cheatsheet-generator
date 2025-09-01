@@ -1,9 +1,8 @@
-from typing import Dict
-from pathlib import Path
 from enum import Enum
+from pathlib import Path
+from typing import Dict
 
 import yaml
-
 
 
 class Role:

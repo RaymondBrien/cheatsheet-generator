@@ -1,7 +1,7 @@
-import sys
 import re
+import sys
 from pathlib import Path
-from typing import Union, Optional
+from typing import Optional, Union
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
