@@ -3,13 +3,13 @@
 # creating subdirs for each new call (dated): eg assets/cheatsheets/TOPIC/file-with-datename.yml
 
 import re
-import yaml
-
 from pathlib import Path
+from typing import Any, TypeVar
+
+import yaml
 
 from config.lib_config import CHEATSHEET_DIR
 from utils.general_utils import make_version
-from typing import TypeVar, Any
 
 
 def get_expected_filename(topic: str, artefact: Any) -> str:

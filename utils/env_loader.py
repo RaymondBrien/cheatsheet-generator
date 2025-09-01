@@ -2,8 +2,8 @@
 Environment variable loader with robust fallback mechanisms
 """
 
-import os
 import logging
+import os
 from pathlib import Path
 from typing import Optional
 
@@ -21,6 +21,7 @@ def load_environment_variables() -> bool:
         # Try to load from python-dotenv first
         try:
             from dotenv import load_dotenv
+
             # Look for .env file in current directory and parent directories
             env_file = find_env_file()
             if env_file:

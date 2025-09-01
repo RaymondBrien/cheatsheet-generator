@@ -1,5 +1,5 @@
-from typing import Dict, List, Union
 from pathlib import Path
+from typing import Dict, List, Union
 
 import yaml
 

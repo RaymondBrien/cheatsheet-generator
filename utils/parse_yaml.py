@@ -1,6 +1,7 @@
-import yaml
 from pathlib import Path
-from typing import Optional, Union, List, Dict
+from typing import Dict, List, Optional, Union
+
+import yaml
 
 
 def validate_str(file):

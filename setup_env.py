@@ -5,6 +5,7 @@ Setup script for environment configuration
 
 from pathlib import Path
 
+
 def create_env_file():
     """Create a .env file with user input."""
     env_file = Path(".env")

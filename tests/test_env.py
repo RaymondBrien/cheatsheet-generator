@@ -9,13 +9,9 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent))
 
-from utils.env_loader import (
-    create_env_template,
-    find_env_file,
-    get_anthropic_api_key,
-    setup_anthropic_environment,
-    validate_api_key,
-)
+from utils.env_loader import (create_env_template, find_env_file,
+                              get_anthropic_api_key,
+                              setup_anthropic_environment, validate_api_key)
 
 
 def test_environment_loader():

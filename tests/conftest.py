@@ -1,15 +1,16 @@
 import os
-import pytest
-import yaml
-from unittest.mock import Mock, patch
-
-from pathlib import Path
-
 # Fix import path - use relative import from project root
 import sys
+from pathlib import Path
+from unittest.mock import Mock, patch
+
+import pytest
+import yaml
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.lib_config import CHEATSHEET_DIR
+
 
 # =========== MOCK ENV ==============
 # Mock the Anthropic client for tests

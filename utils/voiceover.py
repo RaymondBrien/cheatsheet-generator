@@ -3,9 +3,10 @@
 Voiceover generation utilities using pyttsx3.
 """
 
-import pyttsx3
-from typing import Union
 from pathlib import Path
+from typing import Union
+
+import pyttsx3
 
 from utils.general_utils import make_version
 

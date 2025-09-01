@@ -1,11 +1,13 @@
-import pytest
 import os
 import re
-import yaml
-
 from pathlib import Path
 
-from cli import save_cheatsheet, save_voiceover_script, save_response_data, CHEATSHEET_DIR, make_version
+import pytest
+import yaml
+
+from cli import (CHEATSHEET_DIR, make_version, save_cheatsheet,
+                 save_response_data, save_voiceover_script)
+
 
 @pytest.fixture
 def sample_yaml_cheatsheet_response() -> str:

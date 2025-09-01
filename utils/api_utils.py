@@ -5,12 +5,13 @@ git commit that with a unique id: response-cheatsheet-topicid-date-time
 explore how to make async - create folder ready, generate file name ready, commit message ready - httpio?
 """
 
-import yaml
 import logging
 import subprocess
-from typing import Optional, Union, Dict, Any
 from datetime import datetime
 from pathlib import Path
+from typing import Any, Dict, Optional, Union
+
+import yaml
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

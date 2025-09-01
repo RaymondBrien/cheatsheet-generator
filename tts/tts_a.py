@@ -15,8 +15,10 @@ CONS:
 BEST FOR: Quick implementation, testing, lightweight applications
 """
 
-import pyttsx3
 from pathlib import Path
+
+import pyttsx3
+
 
 async def generate_tts_pyttsx3(text: str, output_path: Path):
     """Generate TTS using pyttsx3 (system voices)"""
