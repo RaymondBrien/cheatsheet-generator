@@ -1,2 +1,2 @@
 MAX_TOKENS: int = 10_000
-DEFAULT_TEMP: float = 0.7
+DEFAULT_TEMP: float = 0.1
