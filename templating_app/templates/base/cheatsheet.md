@@ -1,8 +1,6 @@
----
 title: {{ title }}
 author: {{ author }}
 date: {{ current_date('%B %d, %Y') }}
----
 
 # {{ title }}
 
@@ -46,12 +44,11 @@ date: {{ current_date('%B %d, %Y') }}
 {% endfor %}
 {% endif %}
 
----
 {% endfor %}
 {% endif %}
 
 
----
+
 
 {% if resources %}
 {% for resource in resources %}
@@ -59,5 +56,5 @@ date: {{ current_date('%B %d, %Y') }}
 {% endfor %}
 {% endif %}
 
----
+
 *Last updated: {{ current_date() }}*

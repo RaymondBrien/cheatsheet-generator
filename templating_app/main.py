@@ -1,45 +1,3 @@
-import jinja2
-import os
-from pathlib import Path
-from markdown import Markdown
-
-try:
-    from music21 import interval, note, stream
-    MUSIC_SUPPORT = True
-except ImportError:
-    MUSIC_SUPPORT = False
-
-class TemplateProcessor:
-    def __init__(self):
-        self.jinja_env = jinja2.Environment()
-        self.markdown_processor = Markdown(extensions=['codehilite', 'toc'])
-    
-    def validate_template(self, template_path):
-        # markdownlint + custom validation
-        pass
-
-    def render_template(self, template, context):
-        # Jinja2 rendering with dynamic dates/copyright
-        pass
-    
-    def compile_templates(self, template_list):
-        # Combine multiple templates
-        pass
-    
-    def export_pdf(self, markdown_content):
-        # pandoc markdown → PDF
-        pass
-
-from datetime import datetime
-
-from dataclasses import dataclass
-
-
-@dataclass
-class Utils:
-    date: datetime = str(datetime.now().year)
-    last_checked: datetime = str(datetime.now())
-
 """
 Markdown Templating App for Programming Cheatsheets and Music Theory Resources
 A scalable system for generating professional PDF and HTML documents from markdown templates
@@ -49,28 +7,49 @@ import os
 import yaml
 import jinja2
 import subprocess
+from markdown import Markdown
+from dataclasses import dataclass
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional
 import doctest
 import shutil
 
+# --------- Music specific imports ---------
+try:
+    from music21 import interval, note, stream
+    MUSIC_SUPPORT = True
+except ImportError:
+    MUSIC_SUPPORT = False
+# -------------------------------------------
+
+# CONSTANTS TODO move elsewhere
+APP_NAME = 'templating_app'
+DEFAULT_DIR = Path(__file__).parent
+TEMPLATE_DIR = DEFAULT_DIR / 'templates'
+
+@dataclass  # TODO add to utils
+class Utils:
+    date: datetime = str(datetime.now().year)
+    last_checked: datetime = str(datetime.now())
+
 
 class TemplatingApp:
     """Main application for processing markdown templates into PDFs and HTML"""
     
-    def __init__(self, project_root: str = "."):
+    def __init__(self, project_root: str = "."):  # TODO project root not configured correctly, needs work
         self.project_root = Path(project_root)
         self.setup_directories()
         self.setup_jinja_environment()
         self.config = self.load_global_config()
+        self.markdown_processor = Markdown(extensions=['codehilite', 'toc'])
         
     def setup_directories(self):
         """Create project directory structure"""
         directories = [
             "templates/base",
             "templates/styles", 
-            "content",
+            "content/",
             "output/pdf",
             "output/html",
             "tests",
@@ -209,45 +188,62 @@ class TemplatingApp:
         markdown_content = self.render_template(template_name, context)
         
         return markdown_content
-    
+
     def convert_to_pdf(self, markdown_content: str, output_file: Path):
-        """Convert markdown to PDF using pandoc"""
-        # Write temporary markdown file
+        """Dead simple PDF conversion"""
         temp_md = self.project_root / "temp.md"
         with open(temp_md, 'w', encoding='utf-8') as f:
             f.write(markdown_content)
-        
+
         try:
-            # Build pandoc command
-            cmd = [
-                'pandoc',
-                str(temp_md),
-                '-o', str(output_file),
-                '--pdf-engine', self.config['pandoc']['pdf_engine']
-            ]
-            
-            # Add template if exists
-            template_file = self.project_root / self.config['pandoc']['template']
-            if template_file.exists():
-                cmd.extend(['--template', str(template_file)])
-            
-            # Add variables
-            for var, value in self.config['pandoc']['variables'].items():
-                cmd.extend(['-V', f"{var}={value}"])
-            
-            # Run pandoc
+            # Minimal pandoc command - no custom template
+            cmd = ['pandoc', str(temp_md), '-o', str(output_file)]
             result = subprocess.run(cmd, capture_output=True, text=True)
+
             if result.returncode != 0:
-                raise RuntimeError(f"Pandoc error: {result.stderr}")
-                
+                print(f"Pandoc error: {result.stderr}")
+                raise RuntimeError(f"Pandoc failed: {result.stderr}")
+
         finally:
-            # Clean up temp file
             if temp_md.exists():
                 temp_md.unlink()
+
+
+
+    #     try:
+    #         # Build pandoc command
+    #         cmd = [
+    #             'pandoc',
+    #             '-s',
+    #             str(temp_md),
+    #             '-o', str(output_file),
+    #             '--pdf-engine', self.config['pandoc']['pdf_engine'],
+    #             # '--no-highlight',
+    #             '--listings'
+    #         ]
+            
+    #         # Add template if exists
+    #         template_file = self.project_root / self.config['pandoc']['template']
+    #         if template_file.exists():
+    #             cmd.extend(['--template', str(template_file)])
+            
+    #         # Add variables
+    #         for var, value in self.config['pandoc']['variables'].items():
+    #             cmd.extend(['-V', f"{var}={value}"])
+            
+    #         # Run pandoc
+    #         result = subprocess.run(cmd, capture_output=True, text=True)
+    #         if result.returncode != 0:
+    #             raise RuntimeError(f"Pandoc error: {result.stderr}")
+                
+    #     finally:
+    #         # Clean up temp file
+    #         if temp_md.exists():
+    #             temp_md.unlink()
     
     def convert_to_html(self, markdown_content: str, output_file: Path):
         """Convert markdown to HTML using pandoc"""
-        temp_md = self.project_root / "temp.md"  # TODO create if doesn't exist?
+        temp_md = self.project_root / "temp.md"
         with open(temp_md, 'w', encoding='utf-8') as f:
             f.write(markdown_content)
         
@@ -276,7 +272,6 @@ class TemplatingApp:
     def process_single_document(self, content_dir: Path):
         """Process a single document from content directory"""
         print(f"Processing: {content_dir.name}")
-        
         # Compile templates
         markdown_content = self.compile_templates(content_dir)
         
@@ -344,6 +339,7 @@ class TemplatingApp:
 
 def main():
     """Main entry point"""
+    # breakpoint()
     app = TemplatingApp()
     
     # Example usage

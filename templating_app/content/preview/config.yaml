@@ -1,3 +1,6 @@
 title: "Python Basics Test"
-template: "templates/base/programming_cheatsheet.md.j2"
+template: "base/programming_cheatsheet.md.j2"
+pandoc:
+  template:
+    "base/programming_cheatsheet.md.j2"
 language: "python"

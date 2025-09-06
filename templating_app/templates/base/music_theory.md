@@ -1,8 +1,6 @@
----
 title: {{ title }}
 author: {{ author }}
 date: {{ current_date('%B %d, %Y') }}
----
 
 # {{ title }}
 
@@ -45,7 +43,7 @@ date: {{ current_date('%B %d, %Y') }}
 {% endfor %}
 {% endif %}
 
----
+
 {% endfor %}
 {% endif %}
 
@@ -55,5 +53,5 @@ date: {{ current_date('%B %d, %Y') }}
 {{ summary }}
 {% endif %}
 
----
+
 *Generated on {{ current_date() }}*
