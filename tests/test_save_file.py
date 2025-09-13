@@ -7,6 +7,7 @@ import yaml
 
 from cli import (CHEATSHEET_DIR, make_version, save_cheatsheet,
                  save_response_data, save_voiceover_script)
+from utils.voiceover import generate_voiceover
 
 
 @pytest.fixture

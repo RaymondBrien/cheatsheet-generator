@@ -3,8 +3,6 @@
 CLI interface for the cheatsheet generator.
 """
 # Add the project root to the path
-# sys.path.append(str(Path(__file__).resolve().parent))
-
 import argparse
 import re
 import sys
@@ -12,8 +10,10 @@ from pathlib import Path
 
 import yaml
 
+sys.path.append(str(Path(__file__).resolve().parent))
 from config.lib_config import CHEATSHEET_DIR
-from main import main as run_generator
+
+from run_generator import main as run_generator
 from utils.file_management import (save_cheatsheet, save_response_data,
                                    save_voiceover_script)
 from utils.general_utils import make_version

@@ -41,34 +41,19 @@ data:
 
 
 
-[x] send basic prompt
-[x] test api connection first
-[x] send first request for bash cheatsheet
-[x] save received response in outputs/cheatsheets (mocked up with yaml so do markdown version later, just save a file first)
 [ ] makefile create template topic card with subtopics - or cookiecutter
-[x] poetry for easier deps management
-[x] validate each command?
+[ ] utils function for compressing all wav files, put in zip
+[ ] try latest whisper open ai text to voice
 [x] request a second response (or two parts of one response for single api call) which returns an accompanying voiceover-script
-[ ] check cheatsheets are uploaded correctly and saved in correct location 
-[ ] git commit and push cheatsheet pdf once completed
-[x] local tool that renders an mp3 of text-to-voice recording of transcript?
 [ ] save transcript and voiecover recording in same designated subdir as cheatsheet, once validated
 [ ] identify points to learn more about async and shared state protection
-[ ] start to make faster now!
-[ ] update docs and add async testing
-[ ] find all areas to reduce DRY, use async and speed up process, multithreading and multiprocessing could be good here: multithreading for API request whilst doing the prep of file names etc, multiprocessing to then make the files, move them and generate the audio after, as well as another thread to upload. Discover how to test timings so I can see if doing async/multi[thread/processing] makes an impact on timing. Also httpio async version (what's it called?) will help here possibly - op to learn!
+[ ] update docs for clear entry points, features and how to use
+[ ] add async, with unit tests
 [ ] each topic should have its own dir - requires some refactoring later
 [ ] sort voiceoverscript subdir vs transcripts - is some code only expecting one and then writing it to voiceover-scripts instead? Just keep voiceover_scripts
-[ ] use cookiecutter and start adding more ideas: zoxide, other liked CLI tools
-    - template engines: https://yte-template-engine.github.io/
+[ ] trial template engines?: https://yte-template-engine.github.io/
 
 ## 🧪 Today's Testing Tasks
-[x] Fix API error in main.py (client.responses.create doesn't exist)
-[x] Add dry run validation for prompt content
-[x] Create CLI interface for easier testing
-[x] Test dry run mode to validate prompt content
-[x] Test first live API call with bash topic
-[x] Validate API response format and content
 [ ] Write unit tests for api_utils functions
 [ ] Add error handling for API failures
 [ ] Test nightly? - how does that work?
@@ -86,12 +71,10 @@ data:
 
 
 ## 🛡️ Error Handling & Resilience
-[ ] Implement comprehensive error handling with custom exceptions
 [ ] Add retry mechanisms with exponential backoff for API calls
 [ ] Create circuit breaker pattern for API failures
 [ ] Add input validation and sanitization
 [ ] Implement graceful degradation when services are unavailable
-[ ] Add error reporting and alerting
 
 ## ⚙️ Configuration & Environment Management
 [ ] Create centralized configuration management
@@ -99,27 +82,18 @@ data:
 [ ] Implement secrets management for API keys
 [ ] Add configuration validation
 [ ] Create configuration hot-reloading capability
-[ ] Add feature flags for gradual rollouts
 
 ## 🧪 Testing & Quality Assurance
-[ ] flesh out test cases
 [ ] Add comprehensive unit tests with 90%+ coverage
-[ ] Implement integration tests for API interactions
-[ ] Add property-based testing for data validation
-[ ] Create performance benchmarks
-[ ] Add mutation testing for critical paths
 [ ] Implement automated security testing
 
 ## 📊 Monitoring & Observability
-[ ] Add structured logging with correlation IDs
+[ ] Add structured logging with correlation IDs (blackboard with agents, messages carrying trace id's)
 [ ] Implement metrics collection (API response times, success rates)
-[ ] Add distributed tracing for API calls
-[ ] Create dashboards for system health
 [ ] Add alerting for critical failures
 [ ] Implement audit logging for compliance
 
 ## 🚀 Performance & Scalability
-[ ] Implement caching layer for API responses
 [ ] Add async/await for I/O operations
 [ ] Implement connection pooling for API clients
 [ ] Add rate limiting and throttling
@@ -128,7 +102,6 @@ data:
 
 ## 🔒 Security & Compliance
 [ ] Implement secure API key management
-[ ] Add input sanitization and validation
 [ ] Implement rate limiting to prevent abuse
 [ ] Add audit trails for all operations
 [ ] Implement least privilege access controls
@@ -140,7 +113,6 @@ data:
 [ ] Add comprehensive CI/CD pipeline
 [ ] Implement blue-green deployment strategy
 [ ] Add automated dependency updates
-[ ] Create infrastructure as code
 [ ] Add automated rollback capabilities
 
 ## 📚 Documentation & Standards
@@ -152,10 +124,7 @@ data:
 [ ] Add contribution guidelines
 
 ## 🎯 Code Quality & Standards
-[ ] Add comprehensive type hints throughout codebase
-[ ] Implement code formatting with black/isort
-[ ] Add linting with flake8/pylint
-[ ] Implement pre-commit hooks
+[ ] Implement pre-commit hooks for ruff
 [ ] Add code complexity analysis
 [ ] Create coding standards document
 

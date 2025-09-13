@@ -1,0 +1,8 @@
+- topic: bash
+  date: 2023-10-01
+  commands:
+  - '!!': repeat last command
+  - fg: bring most recent suspended command to foreground
+  - '&&': exectute next command but ONLY if previous succeeds
+  - $: store command output to variable
+  - ;: chain commands regardless of success of previous

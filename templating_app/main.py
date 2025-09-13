@@ -24,9 +24,7 @@ except ImportError:
 # -------------------------------------------
 
 # CONSTANTS TODO move elsewhere
-APP_NAME = 'templating_app'
-DEFAULT_DIR = Path(__file__).parent
-TEMPLATE_DIR = DEFAULT_DIR / 'templates'
+from config.lib_config import CHEATSHEET_DIR, TOPIC_DIR, APP_NAME, DEFAULT_DIR, TEMPLATE_DIR
 
 @dataclass  # TODO add to utils
 class Utils:
