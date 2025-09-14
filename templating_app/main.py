@@ -23,7 +23,6 @@ except ImportError:
     MUSIC_SUPPORT = False
 # -------------------------------------------
 
-# CONSTANTS TODO move elsewhere
 from config.lib_config import CHEATSHEET_DIR, TOPIC_DIR, APP_NAME, DEFAULT_DIR, TEMPLATE_DIR
 
 @dataclass  # TODO add to utils

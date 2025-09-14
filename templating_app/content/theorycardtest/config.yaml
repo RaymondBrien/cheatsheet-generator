@@ -1,0 +1,5 @@
+title: "Music Theory Card - Test"
+template: "base/music_theory.md"
+pandoc:
+  template:
+    "base/music_theory.md"

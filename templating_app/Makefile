@@ -1,6 +1,9 @@
-.PHONY: content
+.PHONY: preview
 content:
 	uv run main.py single content/preview
+
+music:
+	uv run main.py single content/theorycardtest
 
 .PHONY: debug
 debug:
