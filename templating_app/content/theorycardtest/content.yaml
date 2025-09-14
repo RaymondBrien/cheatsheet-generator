@@ -1,3 +1,13 @@
 sections:
   - title: "Music Theory Test Card Title from content.yaml"
     description: "Music Theory Test Card Description from content.yaml"
+    concepts:
+      - name: "Note Identification"
+        definition: "I'm a little description"
+        examples:
+          - name: "C Note Example"
+            description: "A basic C note in the fourth octave"
+            notation:
+              note: "C4"
+              octave: 4
+              duration: "quarter"

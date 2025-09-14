@@ -10,8 +10,13 @@ date: {{ current_date('%B %d, %Y') }}
 
 {{ overview|default('Music theory reference guide') }}
 
-{% if concepts %}
-{% for concept in concepts %}
+{% if sections %}
+{% for section in sections %}
+
+### {{ section.title }}
+#### {{ section.description }}
+
+{% for concept in section.concepts %}
 ## {{ concept.name }}
 
 {% if concept.definition %}
@@ -24,7 +29,8 @@ date: {{ current_date('%B %d, %Y') }}
 {% for example in concept.examples %}
 - **{{ example.name }}**: {{ example.description }}
   {% if example.notation %}
-  - Notation: `{{ example.notation }}`
+  "There should be a note underneath me because an example notation has been detected:"
+  {{ render_svg(example.notation) }}
   {% endif %}
 {% endfor %}
 {% endif %}
@@ -44,6 +50,7 @@ date: {{ current_date('%B %d, %Y') }}
 {% endif %}
 
 
+{% endfor %}
 {% endfor %}
 {% endif %}
 

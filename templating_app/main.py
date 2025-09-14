@@ -14,6 +14,7 @@ from datetime import datetime
 from typing import Dict, List, Optional
 import doctest
 import shutil
+from tempfile import TemporaryDirectory
 
 # --------- Music specific imports ---------
 try:
@@ -24,6 +25,7 @@ except ImportError:
 # -------------------------------------------
 
 from config.lib_config import CHEATSHEET_DIR, TOPIC_DIR, APP_NAME, DEFAULT_DIR, TEMPLATE_DIR
+from music21_example_workflow.music21_to_svg import music21_to_svg, create_note_svg
 
 @dataclass  # TODO add to utils
 class Utils:
@@ -49,6 +51,7 @@ class TemplatingApp:
             "content/",
             "output/pdf",
             "output/html",
+            "output/svg",
             "tests",
             "config"
         ]
@@ -69,9 +72,39 @@ class TemplatingApp:
         self.jinja_env.globals.update({
             'current_year': lambda: datetime.now().year,
             'current_date': lambda fmt='%Y-%m-%d': datetime.now().strftime(fmt),
-            'copyright_notice': self.generate_copyright
+            'copyright_notice': self.generate_copyright,
+            'render_svg': self.render_svg
         })
-    
+
+    def render_svg(self, notation_data: dict) -> str:
+        """Render SVG file and return markdown image reference"""
+        if not MUSIC_SUPPORT:
+            return f"![Music support not available - Note: {notation_data.get('note', 'Unknown')}](placeholder.png)"
+        
+        try:
+            # Create note object from notation data
+            note_pitch = notation_data.get('note', 'C4')
+            note_obj = note.Note(note_pitch)
+            
+            # Generate unique filename for this note
+            import hashlib
+            note_hash = hashlib.md5(f"{note_pitch}_{datetime.now().timestamp()}".encode()).hexdigest()[:8]
+            svg_filename = f"note_{note_hash}.svg"
+            
+            svg_path = self.project_root / "output" / "svg" / svg_filename
+            
+            # Ensure SVG output directory exists
+            svg_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Generate SVG and save to file
+            svg_content = music21_to_svg(note_obj, str(svg_path))
+            
+            # Return markdown image reference with correct relative path
+            return f"![Musical notation for {note_pitch}](../svg/{svg_filename})"
+            
+        except Exception as e:
+            return f"![Error rendering note {notation_data.get('note', 'Unknown')}: {str(e)}](placeholder.png)"
+
     def load_global_config(self) -> Dict:
         """Load global configuration settings"""
         config_file = self.project_root / "config" / "global.yaml"
@@ -290,6 +323,7 @@ class TemplatingApp:
         output_name = content_dir.name
         
         for format_type in self.config['output_formats']:
+            # TODO: this can be a threadpool
             if format_type == 'pdf':
                 output_file = self.project_root / "output/pdf" / f"{output_name}.pdf"
                 self.convert_to_pdf(markdown_content, output_file)

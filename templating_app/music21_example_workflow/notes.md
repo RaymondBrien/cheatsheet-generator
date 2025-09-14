@@ -1,7 +1,7 @@
 steps:
 
-1. render a note
-2. render as svg
+<!-- 1. render a note -->
+<!-- 2. render as svg -->
 3. inject into a pdf
 4. integrate into full worksheet genreation workflow: 
    1. refine music cheatsheet template

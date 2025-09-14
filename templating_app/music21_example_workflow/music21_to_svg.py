@@ -31,8 +31,8 @@ def music21_to_svg(music21_object, output_path=None, scale=100):
     # Step 3: Set options (optional)
     options = {
         "scale": scale,
-        "pageWidth": 2100,
-        "pageHeight": 2970
+        "pageWidth": 400,  # Much smaller for web display
+        "pageHeight": 200   # Much smaller for web display  # TODO this should be dynamic?
     }
     tk.setOptions(options)
     
@@ -49,7 +49,7 @@ def music21_to_svg(music21_object, output_path=None, scale=100):
     
     return svg_string
 
-def create_note_svg(pitch, duration=1, output_path=None):
+def create_note_svg(pitch, duration:int = 1, output_path=None, *args, **kwargs):
     """
     Convenience function to create SVG from a single note
     
