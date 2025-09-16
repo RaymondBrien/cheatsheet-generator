@@ -77,7 +77,7 @@ class TemplatingApp:
         })
 
     def render_svg(self, notation_data: dict) -> str:
-        """Render SVG file and return markdown image reference"""
+        """Render SVG file and return markdown image reference using temporary directory"""
         if not MUSIC_SUPPORT:
             return f"![Music support not available - Note: {notation_data.get('note', 'Unknown')}](placeholder.png)"
         
@@ -96,12 +96,12 @@ class TemplatingApp:
             # Ensure SVG output directory exists
             svg_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # Generate SVG and save to file
-            svg_content = music21_to_svg(note_obj, str(svg_path))
+            # Update dimensions
+            svg_content = re.sub(r'width="[^"]*"', 'width="200"', svg_content)
+            svg_content = re.sub(r'height="[^"]*"', 'height="100"', svg_content)
             
-            # Return markdown image reference with correct relative path
-            return f"![Musical notation for {note_pitch}](../svg/{svg_filename})"
-            
+            return svg_content
+                
         except Exception as e:
             return f"![Error rendering note {notation_data.get('note', 'Unknown')}: {str(e)}](placeholder.png)"
 
@@ -220,19 +220,43 @@ class TemplatingApp:
         return markdown_content
 
     def convert_to_pdf(self, markdown_content: str, output_file: Path):
-        """Dead simple PDF conversion"""
+        """PDF conversion with LaTeX SVG support"""
         temp_md = self.project_root / "temp.md"
         with open(temp_md, 'w', encoding='utf-8') as f:
             f.write(markdown_content)
 
         try:
-            # Minimal pandoc command - no custom template
-            cmd = ['pandoc', str(temp_md), '-o', str(output_file)]
+            # Enhanced pandoc command with LaTeX SVG support
+            cmd = [
+                'pandoc', 
+                str(temp_md), 
+                '-o', str(output_file),
+                '--pdf-engine=xelatex',
+                '--variable=geometry:margin=1in',
+                '--variable=fontfamily:libertine',
+                '--variable=colorlinks:true',
+                '--variable=svg:true',  # Enable SVG support
+                '--filter=pandoc-svg'   # Use SVG filter if available
+            ]
+            
             result = subprocess.run(cmd, capture_output=True, text=True)
 
             if result.returncode != 0:
                 print(f"Pandoc error: {result.stderr}")
-                raise RuntimeError(f"Pandoc failed: {result.stderr}")
+                # Try without SVG filter if it fails
+                cmd_simple = [
+                    'pandoc', 
+                    str(temp_md), 
+                    '-o', str(output_file),
+                    '--pdf-engine=xelatex',
+                    '--variable=geometry:margin=1in',
+                    '--variable=fontfamily:libertine',
+                    '--variable=colorlinks:true'
+                ]
+                result = subprocess.run(cmd_simple, capture_output=True, text=True)
+                
+                if result.returncode != 0:
+                    raise RuntimeError(f"Pandoc failed: {result.stderr}")
 
         finally:
             if temp_md.exists():
