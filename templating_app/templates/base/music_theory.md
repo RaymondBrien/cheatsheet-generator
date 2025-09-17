@@ -30,7 +30,7 @@ date: {{ current_date('%B %d, %Y') }}
 - **{{ example.name }}**: {{ example.description }}
   {% if example.notation %}
   "There should be a note underneath me because an example notation has been detected:"
-  {{ render_svg(example.notation) }}
+  {{ render_svg(example.notation.note) }}
   {% endif %}
 {% endfor %}
 {% endif %}
