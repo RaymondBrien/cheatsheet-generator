@@ -31,8 +31,10 @@ def music21_to_svg(music21_object, output_path=None, scale=100):
     # Step 3: Set options (optional)
     options = {
         "scale": scale,
-        "pageWidth": 400,  # Much smaller for web display
-        "pageHeight": 200   # Much smaller for web display  # TODO this should be dynamic?
+        "pageWidth": 200,  # Much smaller for web display
+        "pageHeight": 100,  # Much smaller for web display
+        "adjustPageHeight": True,
+        "adjustPageWidth": True
     }
     tk.setOptions(options)
     
@@ -61,10 +63,12 @@ def create_note_svg(pitch, duration:int = 1, output_path=None, *args, **kwargs):
     Returns:
         str: SVG content as string
     """
+    if not output_path:
+        output_path = tempfile.mktemp(suffix='.svg')
     n = note.Note(pitch, quarterLength=duration)
     return music21_to_svg(n, output_path)
 
-def create_chord_svg(pitches, duration=1, output_path=None):
+def create_chord_svg(pitches: list[str], duration=1, output_path=None):
     """
     Convenience function to create SVG from a chord
     
